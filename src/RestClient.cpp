@@ -8,7 +8,8 @@ RestClient::RestClient(const std::string &url) : url(url)
 
 RestClient::~RestClient()
 {
-    if (curl) {
+    if (curl)
+    {
         curl_easy_cleanup(curl);
     }
 }
@@ -25,6 +26,7 @@ std::string RestClient::fetchData()
     if (curl)
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         CURLcode res = curl_easy_perform(curl);
