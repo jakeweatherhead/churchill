@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/churchill.dir/main.cpp.o -o churchill  /usr/lib/x86_64-linux-gnu/libcurl.so -ljansson 
+/usr/bin/c++ CMakeFiles/churchill.dir/src/main.cpp.o CMakeFiles/churchill.dir/src/RestClient.cpp.o CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o -o churchill  /usr/lib/x86_64-linux-gnu/libcurl.so -ljansson 

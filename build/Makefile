@@ -129,29 +129,77 @@ churchill/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/build
 .PHONY : churchill/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+src/JsonProcessor.o: src/JsonProcessor.cpp.o
+.PHONY : src/JsonProcessor.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/JsonProcessor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o
+.PHONY : src/JsonProcessor.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/JsonProcessor.i: src/JsonProcessor.cpp.i
+.PHONY : src/JsonProcessor.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/JsonProcessor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/JsonProcessor.cpp.i
+.PHONY : src/JsonProcessor.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/JsonProcessor.s: src/JsonProcessor.cpp.s
+.PHONY : src/JsonProcessor.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/JsonProcessor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/JsonProcessor.cpp.s
+.PHONY : src/JsonProcessor.cpp.s
+
+src/RestClient.o: src/RestClient.cpp.o
+.PHONY : src/RestClient.o
+
+# target to build an object file
+src/RestClient.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/RestClient.cpp.o
+.PHONY : src/RestClient.cpp.o
+
+src/RestClient.i: src/RestClient.cpp.i
+.PHONY : src/RestClient.i
+
+# target to preprocess a source file
+src/RestClient.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/RestClient.cpp.i
+.PHONY : src/RestClient.cpp.i
+
+src/RestClient.s: src/RestClient.cpp.s
+.PHONY : src/RestClient.s
+
+# target to generate assembly for a file
+src/RestClient.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/RestClient.cpp.s
+.PHONY : src/RestClient.cpp.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/churchill.dir/build.make CMakeFiles/churchill.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -162,9 +210,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... churchill"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/JsonProcessor.o"
+	@echo "... src/JsonProcessor.i"
+	@echo "... src/JsonProcessor.s"
+	@echo "... src/RestClient.o"
+	@echo "... src/RestClient.i"
+	@echo "... src/RestClient.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 

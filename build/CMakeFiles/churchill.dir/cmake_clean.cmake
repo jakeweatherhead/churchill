@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/churchill.dir/main.cpp.o"
-  "CMakeFiles/churchill.dir/main.cpp.o.d"
+  "CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o"
+  "CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o.d"
+  "CMakeFiles/churchill.dir/src/RestClient.cpp.o"
+  "CMakeFiles/churchill.dir/src/RestClient.cpp.o.d"
+  "CMakeFiles/churchill.dir/src/main.cpp.o"
+  "CMakeFiles/churchill.dir/src/main.cpp.o.d"
   "churchill"
   "churchill.pdb"
 )

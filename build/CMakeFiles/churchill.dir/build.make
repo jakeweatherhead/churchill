@@ -69,32 +69,64 @@ include CMakeFiles/churchill.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/churchill.dir/flags.make
 
-CMakeFiles/churchill.dir/main.cpp.o: CMakeFiles/churchill.dir/flags.make
-CMakeFiles/churchill.dir/main.cpp.o: ../main.cpp
-CMakeFiles/churchill.dir/main.cpp.o: CMakeFiles/churchill.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/churchill.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/churchill.dir/main.cpp.o -MF CMakeFiles/churchill.dir/main.cpp.o.d -o CMakeFiles/churchill.dir/main.cpp.o -c /home/jake/dev/churchill/main.cpp
+CMakeFiles/churchill.dir/src/main.cpp.o: CMakeFiles/churchill.dir/flags.make
+CMakeFiles/churchill.dir/src/main.cpp.o: ../src/main.cpp
+CMakeFiles/churchill.dir/src/main.cpp.o: CMakeFiles/churchill.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/churchill.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/churchill.dir/src/main.cpp.o -MF CMakeFiles/churchill.dir/src/main.cpp.o.d -o CMakeFiles/churchill.dir/src/main.cpp.o -c /home/jake/dev/churchill/src/main.cpp
 
-CMakeFiles/churchill.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/churchill.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jake/dev/churchill/main.cpp > CMakeFiles/churchill.dir/main.cpp.i
+CMakeFiles/churchill.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/churchill.dir/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jake/dev/churchill/src/main.cpp > CMakeFiles/churchill.dir/src/main.cpp.i
 
-CMakeFiles/churchill.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/churchill.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jake/dev/churchill/main.cpp -o CMakeFiles/churchill.dir/main.cpp.s
+CMakeFiles/churchill.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/churchill.dir/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jake/dev/churchill/src/main.cpp -o CMakeFiles/churchill.dir/src/main.cpp.s
+
+CMakeFiles/churchill.dir/src/RestClient.cpp.o: CMakeFiles/churchill.dir/flags.make
+CMakeFiles/churchill.dir/src/RestClient.cpp.o: ../src/RestClient.cpp
+CMakeFiles/churchill.dir/src/RestClient.cpp.o: CMakeFiles/churchill.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/churchill.dir/src/RestClient.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/churchill.dir/src/RestClient.cpp.o -MF CMakeFiles/churchill.dir/src/RestClient.cpp.o.d -o CMakeFiles/churchill.dir/src/RestClient.cpp.o -c /home/jake/dev/churchill/src/RestClient.cpp
+
+CMakeFiles/churchill.dir/src/RestClient.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/churchill.dir/src/RestClient.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jake/dev/churchill/src/RestClient.cpp > CMakeFiles/churchill.dir/src/RestClient.cpp.i
+
+CMakeFiles/churchill.dir/src/RestClient.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/churchill.dir/src/RestClient.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jake/dev/churchill/src/RestClient.cpp -o CMakeFiles/churchill.dir/src/RestClient.cpp.s
+
+CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o: CMakeFiles/churchill.dir/flags.make
+CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o: ../src/JsonProcessor.cpp
+CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o: CMakeFiles/churchill.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o -MF CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o.d -o CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o -c /home/jake/dev/churchill/src/JsonProcessor.cpp
+
+CMakeFiles/churchill.dir/src/JsonProcessor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/churchill.dir/src/JsonProcessor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jake/dev/churchill/src/JsonProcessor.cpp > CMakeFiles/churchill.dir/src/JsonProcessor.cpp.i
+
+CMakeFiles/churchill.dir/src/JsonProcessor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/churchill.dir/src/JsonProcessor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jake/dev/churchill/src/JsonProcessor.cpp -o CMakeFiles/churchill.dir/src/JsonProcessor.cpp.s
 
 # Object files for target churchill
 churchill_OBJECTS = \
-"CMakeFiles/churchill.dir/main.cpp.o"
+"CMakeFiles/churchill.dir/src/main.cpp.o" \
+"CMakeFiles/churchill.dir/src/RestClient.cpp.o" \
+"CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o"
 
 # External object files for target churchill
 churchill_EXTERNAL_OBJECTS =
 
-churchill: CMakeFiles/churchill.dir/main.cpp.o
+churchill: CMakeFiles/churchill.dir/src/main.cpp.o
+churchill: CMakeFiles/churchill.dir/src/RestClient.cpp.o
+churchill: CMakeFiles/churchill.dir/src/JsonProcessor.cpp.o
 churchill: CMakeFiles/churchill.dir/build.make
 churchill: /usr/lib/x86_64-linux-gnu/libcurl.so
 churchill: CMakeFiles/churchill.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable churchill"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jake/dev/churchill/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable churchill"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/churchill.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
