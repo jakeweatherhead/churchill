@@ -1,0 +1,3 @@
+/home/jake/dev/churchill/build/CMakeFiles/churchill.dir
+/home/jake/dev/churchill/build/CMakeFiles/edit_cache.dir
+/home/jake/dev/churchill/build/CMakeFiles/rebuild_cache.dir
