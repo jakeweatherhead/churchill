@@ -7,7 +7,7 @@
 class JsonProcessor
 {
 public:
-    static std::string formatJson(const std::string &jsonStr);
+  static std::string formatJSON(const std::string &jsonStr);
 };
 
 #endif // JSON_PROCESSOR_H
