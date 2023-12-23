@@ -21,7 +21,7 @@ public:
   std::string instrument_name;
   double high;
   double estimated_delivery_price;
-  long long creation_timestamp; // Assuming timestamp is in Unix epoch format
+  long long creation_timestamp; // Assuming timestamp is in UNIX epoch format
   double bid_price;
   std::string base_currency;
   double ask_price;

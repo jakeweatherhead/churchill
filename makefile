@@ -2,16 +2,17 @@
 
 # Project configuration
 BUILDDIR = build
+DATADIR = data
 EXECUTABLE = ./$(BUILDDIR)/churchill
 
 all: build
 
 build:
-	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(BUILDDIR) $(DATADIR)
 	@cd $(BUILDDIR) && cmake .. && cmake --build .
 
 c:
-	@rm -rf $(BUILDDIR)
+	@rm -rf $(BUILDDIR) $(DATADIR)
 
 run:
 	@$(EXECUTABLE)

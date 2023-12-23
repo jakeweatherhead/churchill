@@ -26,6 +26,7 @@ struct Quotes
   std::string best_bid;
   std::string bid_iv;
   std::string bid_size;
+  std::string impact_mid_price;
   std::string mark_iv;
 };
 
@@ -53,7 +54,7 @@ public:
   std::string spot_price;
   std::string strike_price;
   std::string symbol;
-  long long timestamp; // Assuming timestamp is in Unix epoch format
+  long long timestamp;
   double turnover;
   std::string turnover_symbol;
   double turnover_usd;

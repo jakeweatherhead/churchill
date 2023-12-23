@@ -7,9 +7,9 @@
 class RestClient
 {
 public:
-  RestClient(const std::string &url);
+  RestClient();
   ~RestClient();
-  std::string fetchData();
+  std::string HTTP_GET(const std::string &url);
   void postData();
 
 private:

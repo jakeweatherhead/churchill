@@ -1,9 +1,9 @@
-#ifndef DERIBIT_FUTURES_OBJECT_H
-#define DERIBIT_FUTURES_OBJECT_H
+#ifndef DERIBIT_FUTURES_H
+#define DERIBIT_FUTURES_H
 
 #include <string>
 
-class DeribitFuturesObject
+class DeribitFutures
 {
 
 public:
@@ -27,4 +27,4 @@ public:
 
 };
 
-#endif // DERIBIT_FUTURES_OBJECT_H
+#endif // DERIBIT_FUTURES_H

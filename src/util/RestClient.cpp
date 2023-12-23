@@ -1,7 +1,8 @@
-#include "RestClient.h"
+#include "util/RestClient.h"
+
 #include <iostream>
 
-RestClient::RestClient(const std::string &url) : url(url)
+RestClient::RestClient()
 {
   curl = curl_easy_init();
 }
@@ -20,7 +21,7 @@ size_t RestClient::WriteCallback(void *contents, size_t size, size_t nmemb, std:
   return size * nmemb;
 }
 
-std::string RestClient::fetchData()
+std::string RestClient::HTTP_GET(const std::string &url)
 {
   std::string readBuffer;
   if (curl)
@@ -37,3 +38,7 @@ std::string RestClient::fetchData()
   }
   return readBuffer;
 }
+
+// TODO: Implement HTTP_POST
+
+

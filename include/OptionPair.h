@@ -19,6 +19,8 @@ public:
   double spot;
   double capitalRequired;
   double returnPerc;
+
+  OptionPair();
 };
 
 #endif // OPTION_PAIR_H
