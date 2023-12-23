@@ -23,14 +23,6 @@ int main()
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        // std::string deribitBTCFutures = deribitEM->getBitcoinFutures(WRITE_DATA);
-        // std::string deribitBTCOptions = deribitEM->getBitcoinOptions(WRITE_DATA);
-        // std::string deribitETHFutures = deribitEM->getEtherFutures(WRITE_DATA);
-        // std::string deribitETHOptions = deribitEM->getEtherOptions(WRITE_DATA);
-
-        // std::string deltaCallOptions = deltaEM->getOptions("call_options", WRITE_DATA);
-        // std::string deltaPutOptions = deltaEM->getOptions("put_options", WRITE_DATA);
-
         std::vector<DeribitFutures> deribitBTCFuturesVec;
         std::vector<DeribitOption> deribitBTCOptionsVec;
         std::vector<DeribitFutures> deribitETHFuturesVec;
