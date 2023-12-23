@@ -10,7 +10,7 @@ DeribitExchangeManager::~DeribitExchangeManager()
     delete this->client;
 }
 
-std::string DeribitExchangeManager::HTTP_GET_BTC_Futures(bool writeToFile)
+std::string DeribitExchangeManager::getBitcoinFutures(bool writeToFile)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=future";
     std::string res = this->client->HTTP_GET(url);
@@ -25,7 +25,7 @@ std::string DeribitExchangeManager::HTTP_GET_BTC_Futures(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::HTTP_GET_BTC_Options(bool writeToFile)
+std::string DeribitExchangeManager::getBitcoinOptions(bool writeToFile)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=option";
     std::string res = this->client->HTTP_GET(url);
@@ -40,7 +40,7 @@ std::string DeribitExchangeManager::HTTP_GET_BTC_Options(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::HTTP_GET_ETH_Futures(bool writeToFile)
+std::string DeribitExchangeManager::getEtherFutures(bool writeToFile)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=future";
     std::string res = this->client->HTTP_GET(url);
@@ -55,7 +55,7 @@ std::string DeribitExchangeManager::HTTP_GET_ETH_Futures(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::HTTP_GET_ETH_Options(bool writeToFile)
+std::string DeribitExchangeManager::getEtherOptions(bool writeToFile)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=option";
     std::string res = this->client->HTTP_GET(url);

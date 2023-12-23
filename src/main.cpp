@@ -22,13 +22,13 @@ int main()
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        std::string deribitBTCFutures = deribitEM->HTTP_GET_BTC_Futures(WRITE_TO_FILE);
-        std::string deribitBTCOptions = deribitEM->HTTP_GET_BTC_Options(WRITE_TO_FILE);
-        std::string deribitETHFutures = deribitEM->HTTP_GET_ETH_Futures(WRITE_TO_FILE);
-        std::string deribitETHOptions = deribitEM->HTTP_GET_ETH_Options(WRITE_TO_FILE);
+        std::string deribitBTCFutures = deribitEM->getBitcoinFutures(WRITE_TO_FILE);
+        std::string deribitBTCOptions = deribitEM->getBitcoinOptions(WRITE_TO_FILE);
+        std::string deribitETHFutures = deribitEM->getEtherFutures(WRITE_TO_FILE);
+        std::string deribitETHOptions = deribitEM->getEtherOptions(WRITE_TO_FILE);
 
-        std::string deltaCallOptions = deltaEM->HTTP_GET_BTC_ETH_Options("call_options", WRITE_TO_FILE);
-        std::string deltaPutOptions = deltaEM->HTTP_GET_BTC_ETH_Options("put_options", WRITE_TO_FILE);
+        std::string deltaCallOptions = deltaEM->getOptions("call_options", WRITE_TO_FILE);
+        std::string deltaPutOptions = deltaEM->getOptions("put_options", WRITE_TO_FILE);
 
         std::vector<DeribitFutures> deribitBTCFuturesVec;
         std::vector<DeribitOption> deribitBTCOptionsVec;

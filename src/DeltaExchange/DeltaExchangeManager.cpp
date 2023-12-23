@@ -12,7 +12,7 @@ DeltaExchangeManager::~DeltaExchangeManager()
     delete client;
 }
 
-std::string DeltaExchangeManager::HTTP_GET_BTC_ETH_Options(std::string optionType, bool writeToFile)
+std::string DeltaExchangeManager::getOptions(std::string optionType, bool writeToFile)
 {
     static const std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
     std::string res = client->HTTP_GET(url);

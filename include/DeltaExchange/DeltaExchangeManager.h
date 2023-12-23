@@ -16,7 +16,7 @@ public:
     RestClient *client;
     DeltaExchangeManager();
     ~DeltaExchangeManager();
-    std::string HTTP_GET_BTC_ETH_Options(std::string optionType, bool writeToFile);
+    std::string getOptions(std::string optionType, bool writeToFile);
     void parseOptionsToVector(const std::string &currency, const std::string &jsonString, std::vector<DeltaOption> &optionsVec);
 };
 #endif // DELTA_EXCHANGE_MANAGER_H

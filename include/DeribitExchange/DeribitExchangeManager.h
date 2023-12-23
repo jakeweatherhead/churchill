@@ -17,10 +17,10 @@ public:
     RestClient *client;
     DeribitExchangeManager();
     ~DeribitExchangeManager();
-    std::string HTTP_GET_BTC_Futures(bool writeToFile);
-    std::string HTTP_GET_BTC_Options(bool writeToFile);
-    std::string HTTP_GET_ETH_Futures(bool writeToFile);
-    std::string HTTP_GET_ETH_Options(bool writeToFile);
+    std::string getBitcoinFutures(bool writeToFile);
+    std::string getBitcoinOptions(bool writeToFile);
+    std::string getEtherFutures(bool writeToFile);
+    std::string getEtherOptions(bool writeToFile);
     void parseFuturesToVector(const std::string &jsonStr, std::vector<DeribitFutures> &futuresVec);
     void parseOptionsToVector(const std::string &jsonString, std::vector<DeribitOption> &optionsVec);
 };
