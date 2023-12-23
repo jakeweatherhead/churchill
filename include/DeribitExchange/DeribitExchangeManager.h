@@ -14,7 +14,6 @@
 class DeribitExchangeManager
 {
 public:
-    RestClient *client;
     DeribitExchangeManager();
     ~DeribitExchangeManager();
     std::string getBitcoinFutures(bool writeToFile);

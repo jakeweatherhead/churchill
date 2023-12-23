@@ -12,12 +12,21 @@ DeltaExchangeManager::~DeltaExchangeManager()
     delete client;
 }
 
-std::string DeltaExchangeManager::getOptions(std::string optionType, bool writeToFile)
+std::string DeltaExchangeManager::getOptions(std::string optionType, bool writeData)
 {
     static const std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
-    std::string res = client->HTTP_GET(url);
+    std::string res;
+    try
+    {
+        res = RestClient::HTTP_GET(url);
+    }
+    catch (const std::runtime_error &e)
+    {
+        std::cerr << e.what();
+    }
+
     std::string formattedRes = JsonProcessor::formatJSON(res);
-    if (writeToFile)
+    if (writeData)
     {
         std::ofstream file;
         file.open("data/delta_" + optionType + ".json");

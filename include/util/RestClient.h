@@ -9,7 +9,7 @@ class RestClient
 public:
   RestClient();
   ~RestClient();
-  std::string HTTP_GET(const std::string &url);
+  static std::string HTTP_GET(const std::string &url);
   void postData();
 
 private:

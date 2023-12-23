@@ -1,21 +1,29 @@
 #include "DeribitExchange/DeribitExchangeManager.h"
+#include <iostream>
 
 DeribitExchangeManager::DeribitExchangeManager()
 {
-    this->client = new RestClient();
 }
 
 DeribitExchangeManager::~DeribitExchangeManager()
 {
-    delete this->client;
 }
 
-std::string DeribitExchangeManager::getBitcoinFutures(bool writeToFile)
+std::string DeribitExchangeManager::getBitcoinFutures(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=future";
-    std::string res = this->client->HTTP_GET(url);
+    std::string res;
+    try
+    {
+        res = RestClient::HTTP_GET(url);
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what();
+    }
+
     std::string formattedRes = JsonProcessor::formatJSON(res);
-    if (writeToFile)
+    if (writeData)
     {
         std::ofstream file;
         file.open("data/deribit_btc_futures.json");
@@ -25,12 +33,20 @@ std::string DeribitExchangeManager::getBitcoinFutures(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getBitcoinOptions(bool writeToFile)
+std::string DeribitExchangeManager::getBitcoinOptions(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=option";
-    std::string res = this->client->HTTP_GET(url);
+    std::string res;
+    try
+    {
+        res = RestClient::HTTP_GET(url);
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what();
+    }
     std::string formattedRes = JsonProcessor::formatJSON(res);
-    if (writeToFile)
+    if (writeData)
     {
         std::ofstream file;
         file.open("data/deribit_btc_options.json");
@@ -40,12 +56,21 @@ std::string DeribitExchangeManager::getBitcoinOptions(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getEtherFutures(bool writeToFile)
+std::string DeribitExchangeManager::getEtherFutures(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=future";
-    std::string res = this->client->HTTP_GET(url);
+    std::string res;
+    try
+    {
+        res = RestClient::HTTP_GET(url);
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what();
+    }
+
     std::string formattedRes = JsonProcessor::formatJSON(res);
-    if (writeToFile)
+    if (writeData)
     {
         std::ofstream file;
         file.open("data/deribit_eth_futures.json");
@@ -55,12 +80,21 @@ std::string DeribitExchangeManager::getEtherFutures(bool writeToFile)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getEtherOptions(bool writeToFile)
+std::string DeribitExchangeManager::getEtherOptions(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=option";
-    std::string res = this->client->HTTP_GET(url);
+    std::string res;
+    try
+    {
+        res = RestClient::HTTP_GET(url);
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what();
+    }
+
     std::string formattedRes = JsonProcessor::formatJSON(res);
-    if (writeToFile)
+    if (writeData)
     {
         std::ofstream file;
         file.open("data/deribit_eth_options.json");
