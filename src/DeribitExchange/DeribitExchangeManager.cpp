@@ -128,23 +128,23 @@ void DeribitExchangeManager::parseFuturesToVector(const std::string &jsonString,
     {
         DeribitFutures contract;
 
-        contract.mid_price = JsonProcessor::getNumber(value, "mid_price");
-        contract.estimated_delivery_price = JsonProcessor::getNumber(value, "estimated_delivery_price");
-        contract.volume_notional = JsonProcessor::getNumber(value, "volume_notional");
-        contract.volume_usd = JsonProcessor::getNumber(value, "volume_usd");
-        contract.quote_currency = JsonProcessor::getNumber(value, "quote_currency");
-        contract.creation_timestamp = JsonProcessor::getNumber(value, "creation_timestamp");
-        contract.base_currency = JsonProcessor::getString(value, "base_currency");
-        contract.volume = JsonProcessor::getNumber(value, "volume");
-        contract.open_interest = JsonProcessor::getNumber(value, "open_interest");
-        contract.ask_price = JsonProcessor::getNumber(value, "ask_price");
-        contract.bid_price = JsonProcessor::getNumber(value, "bid_price");
-        contract.price_change = JsonProcessor::getNumber(value, "price_change");
-        contract.mark_price = JsonProcessor::getNumber(value, "mark_price");
-        contract.instrument_name = JsonProcessor::getString(value, "instrument_name");
-        contract.last = JsonProcessor::getNumber(value, "last");
-        contract.low = JsonProcessor::getNumber(value, "low");
-        contract.high = JsonProcessor::getNumber(value, "high");
+        contract.mid_price = JsonProcessor::parseNumber(value, "mid_price");
+        contract.estimated_delivery_price = JsonProcessor::parseNumber(value, "estimated_delivery_price");
+        contract.volume_notional = JsonProcessor::parseNumber(value, "volume_notional");
+        contract.volume_usd = JsonProcessor::parseNumber(value, "volume_usd");
+        contract.quote_currency = JsonProcessor::parseNumber(value, "quote_currency");
+        contract.creation_timestamp = JsonProcessor::parseNumber(value, "creation_timestamp");
+        contract.base_currency = JsonProcessor::parseString(value, "base_currency");
+        contract.volume = JsonProcessor::parseNumber(value, "volume");
+        contract.open_interest = JsonProcessor::parseNumber(value, "open_interest");
+        contract.ask_price = JsonProcessor::parseNumber(value, "ask_price");
+        contract.bid_price = JsonProcessor::parseNumber(value, "bid_price");
+        contract.price_change = JsonProcessor::parseNumber(value, "price_change");
+        contract.mark_price = JsonProcessor::parseNumber(value, "mark_price");
+        contract.instrument_name = JsonProcessor::parseString(value, "instrument_name");
+        contract.last = JsonProcessor::parseNumber(value, "last");
+        contract.low = JsonProcessor::parseNumber(value, "low");
+        contract.high = JsonProcessor::parseNumber(value, "high");
 
         futuresVec.push_back(contract);
     }
@@ -176,25 +176,25 @@ void DeribitExchangeManager::parseOptionsToVector(const std::string &jsonString,
     {
         DeribitOption option;
 
-        option.volume_usd = JsonProcessor::getNumber(value, "volume_usd");
-        option.volume = JsonProcessor::getNumber(value, "volume");
-        option.underlying_price = JsonProcessor::getNumber(value, "underlying_price");
-        option.underlying_index = JsonProcessor::getString(value, "underlying_index");
-        option.quote_currency = JsonProcessor::getString(value, "quote_currency");
-        option.price_change = JsonProcessor::getNumber(value, "price_change");
-        option.open_interest = JsonProcessor::getNumber(value, "open_interest");
-        option.mid_price = JsonProcessor::getNumber(value, "mid_price");
-        option.mark_price = JsonProcessor::getNumber(value, "mark_price");
-        option.low = JsonProcessor::getNumber(value, "low");
-        option.last = JsonProcessor::getNumber(value, "last");
-        option.interest_rate = JsonProcessor::getNumber(value, "interest_rate");
-        option.instrument_name = JsonProcessor::getString(value, "instrument_name");
-        option.high = JsonProcessor::getNumber(value, "high");
-        option.estimated_delivery_price = JsonProcessor::getNumber(value, "estimated_delivery_price");
-        option.creation_timestamp = JsonProcessor::getInteger(value, "creation_timestamp");
-        option.bid_price = JsonProcessor::getNumber(value, "bid_price");
-        option.base_currency = JsonProcessor::getString(value, "base_currency");
-        option.ask_price = JsonProcessor::getNumber(value, "ask_price");
+        option.volume_usd = JsonProcessor::parseNumber(value, "volume_usd");
+        option.volume = JsonProcessor::parseNumber(value, "volume");
+        option.underlying_price = JsonProcessor::parseNumber(value, "underlying_price");
+        option.underlying_index = JsonProcessor::parseString(value, "underlying_index");
+        option.quote_currency = JsonProcessor::parseString(value, "quote_currency");
+        option.price_change = JsonProcessor::parseNumber(value, "price_change");
+        option.open_interest = JsonProcessor::parseNumber(value, "open_interest");
+        option.mid_price = JsonProcessor::parseNumber(value, "mid_price");
+        option.mark_price = JsonProcessor::parseNumber(value, "mark_price");
+        option.low = JsonProcessor::parseNumber(value, "low");
+        option.last = JsonProcessor::parseNumber(value, "last");
+        option.interest_rate = JsonProcessor::parseNumber(value, "interest_rate");
+        option.instrument_name = JsonProcessor::parseString(value, "instrument_name");
+        option.high = JsonProcessor::parseNumber(value, "high");
+        option.estimated_delivery_price = JsonProcessor::parseNumber(value, "estimated_delivery_price");
+        option.creation_timestamp = JsonProcessor::parseInteger(value, "creation_timestamp");
+        option.bid_price = JsonProcessor::parseNumber(value, "bid_price");
+        option.base_currency = JsonProcessor::parseString(value, "base_currency");
+        option.ask_price = JsonProcessor::parseNumber(value, "ask_price");
 
         optionsVec.push_back(option);
     }
