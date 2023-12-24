@@ -28,7 +28,7 @@ std::string JsonProcessor::formatJSON(const std::string &jsonStr)
     return formatted;
 }
 
-double JsonProcessor::getNumber(json_t *value, const char *key)
+double JsonProcessor::parseNumber(json_t *value, const char *key)
 {
     json_t *jsonValue = json_object_get(value, key);
     if (!jsonValue || !json_is_number(jsonValue))
@@ -38,7 +38,7 @@ double JsonProcessor::getNumber(json_t *value, const char *key)
     return json_number_value(jsonValue);
 }
 
-int JsonProcessor::getInteger(json_t *value, const char *key)
+int JsonProcessor::parseInteger(json_t *value, const char *key)
 {
     json_t *jsonValue = json_object_get(value, key);
     if (!jsonValue || !json_is_integer(jsonValue))
@@ -48,7 +48,7 @@ int JsonProcessor::getInteger(json_t *value, const char *key)
     return json_integer_value(jsonValue);
 }
 
-std::string JsonProcessor::getString(json_t *value, const char *key)
+std::string JsonProcessor::parseString(json_t *value, const char *key)
 {
     json_t *jsonValue = json_object_get(value, key);
     if (!jsonValue || !json_is_string(jsonValue))
