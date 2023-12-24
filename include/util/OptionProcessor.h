@@ -9,14 +9,9 @@
 class OptionProcessor
 {
 public:
-    struct OptionPairHolder
-    {
-        std::vector<OptionPair> BTCPairs;
-        std::vector<OptionPair> ETHPairs;
-    };
     OptionProcessor();
     ~OptionProcessor();
-    void createOptionPairs(const std::string &symbol, const std::string *deribitOptions, const std::string *deltaCallOptions, const std::string *deltaPutOptions);
+    void createOptionPairs(const std::string &symbol, std::vector<DeribitOption> &deribitOptions, std::vector<DeltaOption> &deltaCallOptions, std::vector<DeltaOption> &deltaPutOptions, std::vector<OptionPair> &candidates);
 };
 
 #endif // OPTION_PROCESSOR_H
