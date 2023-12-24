@@ -6,21 +6,18 @@
 class OptionPair
 {
 public:
-  int arbID;
-  std::string deltaSymbol;
-  std::string deribitSymbol;
-  double callPrice;
-  double makerFee;
-  double putPrice;
-  double takerFee;
-  std::string expiration;
-  double strike;
-  double deribitFuturesMidPrice;
-  double spot;
-  double capitalRequired;
-  double returnPerc;
-
-  OptionPair();
+    std::string deltaSymbol;
+    std::string deribitSymbol;
+    double callPrice;
+    double makerFee;
+    double strike;
+    double putPrice;
+    double takerFee;
+    double deribitFuturesMidPrice;
+    double spot;
+    double capitalRequired;
+    double profit;
+    double returnPerc;
 };
 
 #endif // OPTION_PAIR_H
