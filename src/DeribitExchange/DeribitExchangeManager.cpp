@@ -9,7 +9,7 @@ DeribitExchangeManager::~DeribitExchangeManager()
 {
 }
 
-std::string DeribitExchangeManager::getBitcoinFutures(bool writeData)
+std::string DeribitExchangeManager::fetchBtcFutures(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=future";
     std::string res;
@@ -17,7 +17,7 @@ std::string DeribitExchangeManager::getBitcoinFutures(bool writeData)
     {
         res = RestClient::HTTP_GET(url);
     }
-    catch (const std::runtime_error& e)
+    catch (const std::runtime_error &e)
     {
         std::cerr << e.what();
     }
@@ -33,7 +33,7 @@ std::string DeribitExchangeManager::getBitcoinFutures(bool writeData)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getBitcoinOptions(bool writeData)
+std::string DeribitExchangeManager::fetchBtcOptions(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=option";
     std::string res;
@@ -41,7 +41,7 @@ std::string DeribitExchangeManager::getBitcoinOptions(bool writeData)
     {
         res = RestClient::HTTP_GET(url);
     }
-    catch (const std::runtime_error& e)
+    catch (const std::runtime_error &e)
     {
         std::cerr << e.what();
     }
@@ -56,7 +56,7 @@ std::string DeribitExchangeManager::getBitcoinOptions(bool writeData)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getEtherFutures(bool writeData)
+std::string DeribitExchangeManager::fetchEthFutures(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=future";
     std::string res;
@@ -64,7 +64,7 @@ std::string DeribitExchangeManager::getEtherFutures(bool writeData)
     {
         res = RestClient::HTTP_GET(url);
     }
-    catch (const std::runtime_error& e)
+    catch (const std::runtime_error &e)
     {
         std::cerr << e.what();
     }
@@ -80,7 +80,7 @@ std::string DeribitExchangeManager::getEtherFutures(bool writeData)
     return formattedRes;
 }
 
-std::string DeribitExchangeManager::getEtherOptions(bool writeData)
+std::string DeribitExchangeManager::fetchEthOptions(bool writeData)
 {
     static const std::string url = "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=option";
     std::string res;
@@ -88,7 +88,7 @@ std::string DeribitExchangeManager::getEtherOptions(bool writeData)
     {
         res = RestClient::HTTP_GET(url);
     }
-    catch (const std::runtime_error& e)
+    catch (const std::runtime_error &e)
     {
         std::cerr << e.what();
     }
@@ -200,4 +200,16 @@ void DeribitExchangeManager::parseOptionsToVector(const std::string &jsonString,
     }
 
     json_decref(root); // Only need to decref the root; it will also decref child objects
+}
+
+DeribitOption DeribitExchangeManager::findDeribitComplement(const std::vector<DeribitOption> &optionsVec, const std::string &optionInstrumentName)
+{
+    for (int i = 0; i < optionsVec.size(); i++)
+    {
+        if (optionsVec[i].instrument_name == optionInstrumentName)
+        {
+            return optionsVec[i];
+        }
+    }
+    throw std::runtime_error("Could not find deribit complement: " + optionInstrumentName);
 }

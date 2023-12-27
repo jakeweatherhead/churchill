@@ -14,7 +14,6 @@ public:
     double putPrice;
     double takerFee;
     double deribitFuturesMidPrice;
-    double spot;
     double capitalRequired;
     double profit;
     double returnPerc;

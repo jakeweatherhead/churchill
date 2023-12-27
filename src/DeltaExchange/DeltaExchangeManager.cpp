@@ -10,7 +10,7 @@ DeltaExchangeManager::~DeltaExchangeManager()
 {
 }
 
-std::string DeltaExchangeManager::getOptions(std::string optionType, bool writeData)
+std::string DeltaExchangeManager::fetchOptions(std::string optionType, bool writeData)
 {
     static const std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
     std::string res;
@@ -114,4 +114,24 @@ void DeltaExchangeManager::parseOptionsToVector(const std::string &currency, con
     }
 
     json_decref(root);
+}
+
+std::vector<std::string> DeltaExchangeManager::split(const std::string &input, const char &delimiter)
+{
+
+    if (input.empty())
+    {
+        throw std::invalid_argument("Input string is empty");
+    }
+
+    std::vector<std::string> parts;
+    std::string part;
+    std::istringstream tokenStream(input);
+
+    while (std::getline(tokenStream, part, delimiter))
+    {
+        parts.push_back(part);
+    }
+
+    return parts;
 }

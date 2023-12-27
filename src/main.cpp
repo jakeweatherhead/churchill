@@ -18,8 +18,8 @@ int main()
     int NUM_RUNS = 1;
     bool WRITE_DATA = true;
 
-    DeribitExchangeManager *deribitEM = new DeribitExchangeManager();
-    DeltaExchangeManager *deltaEM = new DeltaExchangeManager();
+    DeribitExchangeManager *dbtEM = new DeribitExchangeManager();
+    DeltaExchangeManager *dltEM = new DeltaExchangeManager();
     OptionProcessor *optionProcessor = new OptionProcessor();
     PCP_Strategy_0 *strategy = new PCP_Strategy_0();
 
@@ -28,73 +28,108 @@ int main()
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        std::vector<DeribitFutures> deribitBTCFuturesVec;
-        std::vector<DeribitOption> deribitBTCOptionsVec;
-        std::vector<DeribitFutures> deribitETHFuturesVec;
-        std::vector<DeribitOption> deribitETHOptionsVec;
+        auto dbtBtcFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcFutures, dbtEM, WRITE_DATA);
+        auto dbtBTCOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM, WRITE_DATA);
+        auto dbtETHFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM, WRITE_DATA);
+        auto dbtETHOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM, WRITE_DATA);
 
-        std::vector<DeltaOption> deltaCallOptionsVec;
-        std::vector<DeltaOption> deltaPutOptionsVec;
-        std::vector<DeltaOption> deltaBTCCallOptionsVec;
-        std::vector<DeltaOption> deltaETHCallOptionsVec;
+        auto dltCallOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options", WRITE_DATA);
+        auto dltPutOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options", WRITE_DATA);
 
-        auto deribitBTCFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::getBitcoinFutures, deribitEM, WRITE_DATA);
-        auto deribitBTCOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::getBitcoinOptions, deribitEM, WRITE_DATA);
-        auto deribitETHFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::getEtherFutures, deribitEM, WRITE_DATA);
-        auto deribitETHOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::getEtherOptions, deribitEM, WRITE_DATA);
+        std::string dbtBtcFutures;
+        std::string dbtBtcOptions;
+        std::string dbtEthFutures;
+        std::string dbtEthOptions;
 
-        auto deltaCallOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::getOptions, deltaEM, "call_options", WRITE_DATA);
-        auto deltaPutOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::getOptions, deltaEM, "put_options", WRITE_DATA);
-
-        std::string deribitBTCFutures;
-        std::string deribitBTCOptions;
-        std::string deribitETHFutures;
-        std::string deribitETHOptions;
-        std::string deltaCallOptions;
-        std::string deltaPutOptions;
+        std::string dltCallOptions;
+        std::string dltPutOptions;
 
         try
         {
-            deribitBTCFutures = deribitBTCFuturesFuture.get();
-            deribitBTCOptions = deribitBTCOptionsFuture.get();
-            deribitETHFutures = deribitETHFuturesFuture.get();
-            deribitETHOptions = deribitETHOptionsFuture.get();
+            dbtBtcFutures = dbtBtcFuturesFuture.get();
+            dbtBtcOptions = dbtBTCOptionsFuture.get();
+            dbtEthFutures = dbtETHFuturesFuture.get();
+            dbtEthOptions = dbtETHOptionsFuture.get();
 
-            deltaCallOptions = deltaCallOptionsFuture.get();
-            deltaPutOptions = deltaPutOptionsFuture.get();
+            dltCallOptions = dltCallOptionsFuture.get();
+            dltPutOptions = dltPutOptionsFuture.get();
         }
         catch (const std::exception &e)
         {
             std::cerr << e.what();
         }
 
+        //==--------------------------------------------------------------------==//
+
+        std::vector<DeribitFutures> dbtBtcFuturesVec;
+        std::vector<DeribitOption> dbtBtcOptionsVec;
+
+        std::vector<DeribitFutures> dbtEthFuturesVec;
+        std::vector<DeribitOption> dbtEthOptionsVec;
+
+        std::vector<DeltaOption> dltBtcCallOptionsVec;
+        std::vector<DeltaOption> dltBtcPutOptionsVec;
+
+        std::vector<DeltaOption> dltEthCallOptionsVec;
+        std::vector<DeltaOption> dltEthPutOptionsVec;
+
         try
         {
-            deribitEM->parseFuturesToVector(deribitBTCFutures, deribitBTCFuturesVec);
-            deribitEM->parseOptionsToVector(deribitBTCOptions, deribitBTCOptionsVec);
-            deribitEM->parseOptionsToVector(deribitETHOptions, deribitETHOptionsVec);
-            deribitEM->parseFuturesToVector(deribitETHFutures, deribitETHFuturesVec);
+            dbtEM->parseFuturesToVector(dbtBtcFutures, dbtBtcFuturesVec);
+            dbtEM->parseOptionsToVector(dbtBtcOptions, dbtBtcOptionsVec);
 
-            deltaEM->parseOptionsToVector("BTC", deltaCallOptions, deltaBTCCallOptionsVec);
-            deltaEM->parseOptionsToVector("ETH", deltaCallOptions, deltaETHCallOptionsVec);
+            dbtEM->parseFuturesToVector(dbtEthFutures, dbtEthFuturesVec);
+            dbtEM->parseOptionsToVector(dbtEthOptions, dbtEthOptionsVec);
+
+            dltEM->parseOptionsToVector("BTC", dltCallOptions, dltBtcCallOptionsVec);
+            dltEM->parseOptionsToVector("BTC", dltPutOptions, dltBtcPutOptionsVec);
+
+            dltEM->parseOptionsToVector("ETH", dltCallOptions, dltEthCallOptionsVec);
+            dltEM->parseOptionsToVector("ETH", dltPutOptions, dltEthPutOptionsVec);
         }
         catch (const std::exception &e)
         {
             std::cerr << e.what();
         }
 
-        std::vector<OptionPair> candidates;
-        optionProcessor->createOptionPairs("BTC", deribitBTCOptionsVec, deltaBTCCallOptionsVec, deltaPutOptionsVec, candidates);
-        strategy->filterArbitrageOpportunities(candidates);
+        // Combine delta options (BTC)
+        std::vector<DeltaOption> dltBtcOptionsVec = dltBtcCallOptionsVec;
+        dltBtcOptionsVec.insert(dltBtcOptionsVec.end(), dltBtcPutOptionsVec.begin(), dltBtcPutOptionsVec.end());
 
-        if (candidates.size() == 0)
+        // Combine delta options (ETH)
+        std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
+        dltEthOptionsVec.insert(dltEthOptionsVec.end(), dltEthPutOptionsVec.begin(), dltEthPutOptionsVec.end());
+
+        // Process BTC candidates
+        std::vector<OptionPair> btcCandidates = optionProcessor->createOptionPairs("BTC", dbtBtcOptionsVec, dltBtcOptionsVec, dbtBtcFuturesVec);
+        strategy->filterArbitrageOpportunities(btcCandidates);
+
+        if (btcCandidates.size() == 0)
         {
-            std::cout << "No arbitrage opportunities found." << std::endl;
+            std::cout << "No BTC arbitrage opportunities found." << std::endl;
         }
         else
         {
-            std::string candidatesStr = JsonProcessor::convertOptionPairsToString(candidates);
-            std::string formattedRes = JsonProcessor::formatJSON(candidatesStr);
+            std::string btcCandidatesStr = JsonProcessor::convertOptionPairsToString(btcCandidates);
+            std::string formattedRes = JsonProcessor::formatJSON(btcCandidatesStr);
+            std::ofstream file;
+            file.open("data/candidates.json");
+            file << formattedRes;
+            file.close();
+        }
+
+        // Process ETH candidates
+        std::vector<OptionPair> ethCandidates = optionProcessor->createOptionPairs("ETH", dbtEthOptionsVec, dltEthOptionsVec, dbtEthFuturesVec);
+        strategy->filterArbitrageOpportunities(ethCandidates);
+
+        if (ethCandidates.size() == 0)
+        {
+            std::cout << "No ETH arbitrage opportunities found." << std::endl;
+        }
+        else
+        {
+            std::string ethCandidatesStr = JsonProcessor::convertOptionPairsToString(ethCandidates);
+            std::string formattedRes = JsonProcessor::formatJSON(ethCandidatesStr);
             std::ofstream file;
             file.open("data/candidates.json");
             file << formattedRes;
@@ -105,6 +140,7 @@ int main()
         durations[i] = finish - start;
     }
 
+    // Get performance metrics
     double sum = 0;
     std::cout << "Number of runs: " << NUM_RUNS << std::endl;
     for (int i = 0; i < NUM_RUNS; i++)
@@ -116,6 +152,6 @@ int main()
     }
     std::cout << "Average execution time: " << sum / NUM_RUNS << std::endl;
 
-    delete deribitEM;
-    delete deltaEM;
+    delete dbtEM;
+    delete dltEM;
 }

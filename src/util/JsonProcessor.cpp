@@ -72,7 +72,6 @@ std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPa
         jCandidate["putPrice"] = candidate.putPrice;
         jCandidate["takerFee"] = candidate.takerFee;
         jCandidate["deribitFuturesMidPrice"] = candidate.deribitFuturesMidPrice;
-        jCandidate["spot"] = candidate.spot;
         jCandidate["capitalRequired"] = candidate.capitalRequired;
         jCandidate["profit"] = candidate.profit;
         jCandidate["returnPerc"] = candidate.returnPerc;

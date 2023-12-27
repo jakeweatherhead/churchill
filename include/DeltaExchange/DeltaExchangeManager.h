@@ -8,6 +8,7 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 class DeltaExchangeManager
@@ -15,7 +16,8 @@ class DeltaExchangeManager
 public:
     DeltaExchangeManager();
     ~DeltaExchangeManager();
-    std::string getOptions(std::string optionType, bool writeToFile);
+    std::string fetchOptions(std::string optionType, bool writeToFile);
     void parseOptionsToVector(const std::string &currency, const std::string &jsonString, std::vector<DeltaOption> &optionsVec);
+    static std::vector<std::string> split(const std::string &symbol, const char &delimiter);
 };
 #endif // DELTA_EXCHANGE_MANAGER_H

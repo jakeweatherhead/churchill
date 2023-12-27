@@ -16,12 +16,13 @@ class DeribitExchangeManager
 public:
     DeribitExchangeManager();
     ~DeribitExchangeManager();
-    std::string getBitcoinFutures(bool writeToFile);
-    std::string getBitcoinOptions(bool writeToFile);
-    std::string getEtherFutures(bool writeToFile);
-    std::string getEtherOptions(bool writeToFile);
+    std::string fetchBtcFutures(bool writeToFile);
+    std::string fetchBtcOptions(bool writeToFile);
+    std::string fetchEthFutures(bool writeToFile);
+    std::string fetchEthOptions(bool writeToFile);
     void parseFuturesToVector(const std::string &jsonStr, std::vector<DeribitFutures> &futuresVec);
     void parseOptionsToVector(const std::string &jsonString, std::vector<DeribitOption> &optionsVec);
+    static DeribitOption findDeribitComplement(const std::vector<DeribitOption> &optionsVec, const std::string &optionInstrumentName);
 };
 
 #endif // DERIBIT_EXCHANGE_MANAGER_H
