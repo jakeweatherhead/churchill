@@ -4,12 +4,10 @@
 
 DeltaExchangeManager::DeltaExchangeManager()
 {
-    client = new RestClient();
 }
 
 DeltaExchangeManager::~DeltaExchangeManager()
 {
-    delete client;
 }
 
 std::string DeltaExchangeManager::getOptions(std::string optionType, bool writeData)
