@@ -4,6 +4,7 @@
 #include "OptionPair.h"
 
 #include <vector>
+#include <iostream>
 
 class PCP_Strategy_0
 {
