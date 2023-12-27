@@ -34,6 +34,11 @@ void PCP_Strategy_0::setProfit(OptionPair &optionPair)
     optionPair.profit -= optionPair.deribitFuturesMidPrice;
 }
 
+void PCP_Strategy_0::setReturnPerc(OptionPair &optionPair)
+{
+    optionPair.returnPerc = optionPair.profit / optionPair.capitalRequired;
+}
+
 bool PCP_Strategy_0::returnIsSufficient(OptionPair &optionPair)
 {
     return optionPair.returnPerc > 0.01;
