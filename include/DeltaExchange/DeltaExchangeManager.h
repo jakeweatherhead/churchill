@@ -13,7 +13,6 @@
 class DeltaExchangeManager
 {
 public:
-    RestClient *client;
     DeltaExchangeManager();
     ~DeltaExchangeManager();
     std::string getOptions(std::string optionType, bool writeToFile);
