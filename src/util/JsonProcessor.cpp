@@ -57,3 +57,26 @@ std::string JsonProcessor::parseString(json_t *value, const char *key)
     }
     return json_string_value(jsonValue);
 }
+
+std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPair>& candidates)
+{
+    nlohmann::json j;
+    for (const auto& candidate : candidates)
+    {
+        nlohmann::json jCandidate;
+        jCandidate["deltaSymbol"] = candidate.deribitSymbol;
+        jCandidate["deribitSymbol"] = candidate.deribitSymbol;
+        jCandidate["callPrice"] = candidate.callPrice;
+        jCandidate["makerFee"] = candidate.makerFee;
+        jCandidate["strike"] = candidate.strike;
+        jCandidate["putPrice"] = candidate.putPrice;
+        jCandidate["takerFee"] = candidate.takerFee;
+        jCandidate["deribitFuturesMidPrice"] = candidate.deribitFuturesMidPrice;
+        jCandidate["spot"] = candidate.spot;
+        jCandidate["capitalRequired"] = candidate.capitalRequired;
+        jCandidate["profit"] = candidate.profit;
+        jCandidate["returnPerc"] = candidate.returnPerc;
+        j.push_back(jCandidate);
+    }
+    return j.dump();
+}
