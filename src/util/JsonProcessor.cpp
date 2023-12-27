@@ -28,40 +28,49 @@ std::string JsonProcessor::formatJSON(const std::string &jsonStr)
     return formatted;
 }
 
-double JsonProcessor::parseNumber(json_t *value, const char *key)
+double JsonProcessor::parseNumber(json_t *value)
 {
-    json_t *jsonValue = json_object_get(value, key);
-    if (!jsonValue || !json_is_number(jsonValue))
+    if (!value)
     {
-        return 0.0;
+        throw std::runtime_error("json_t value to be parsed to number is null");
     }
-    return json_number_value(jsonValue);
+    else if (!json_is_number(value))
+    {
+        throw std::runtime_error("json_t value to be parsed to number is not an object");
+    }
+    return json_number_value(value);
 }
 
-int JsonProcessor::parseInteger(json_t *value, const char *key)
+int JsonProcessor::parseInteger(json_t *value)
 {
-    json_t *jsonValue = json_object_get(value, key);
-    if (!jsonValue || !json_is_integer(jsonValue))
+    if (!value)
     {
-        return 0;
+        throw std::runtime_error("json_t value to be parsed to integer is null");
     }
-    return json_integer_value(jsonValue);
+    else if (!json_is_integer(value))
+    {
+        throw std::runtime_error("json_t value to be parsed to integer is not an integer");
+    }
+    return json_integer_value(value);
 }
 
-std::string JsonProcessor::parseString(json_t *value, const char *key)
+std::string JsonProcessor::parseString(json_t *value)
 {
-    json_t *jsonValue = json_object_get(value, key);
-    if (!jsonValue || !json_is_string(jsonValue))
+    if (!value)
     {
-        return "";
+        throw std::runtime_error("json_t value to be parsed to string is null");
     }
-    return json_string_value(jsonValue);
+    else if (!json_is_string(value))
+    {
+        throw std::runtime_error("json_t value to be parsed to string is not a string");
+    }
+    return json_string_value(value);
 }
 
-std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPair>& candidates)
+std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPair> &candidates)
 {
     nlohmann::json j;
-    for (const auto& candidate : candidates)
+    for (const auto &candidate : candidates)
     {
         nlohmann::json jCandidate;
         jCandidate["deltaSymbol"] = candidate.deribitSymbol;
