@@ -1,9 +1,13 @@
 #include "util/RestClient.h"
 #include "util/JsonProcessor.h"
 #include "util/OptionProcessor.h"
+
 #include "DeribitExchange/DeribitExchangeManager.h"
+
 #include "DeltaExchange/DeltaExchangeManager.h"
 #include "DeltaExchange/DeltaOption.h"
+
+#include "PutCallParity/PCP_Strategy_0.h"
 
 #include <iostream>
 #include <chrono>
@@ -12,11 +16,12 @@
 int main()
 {
     int NUM_RUNS = 1;
-    bool WRITE_DATA = false;
+    bool WRITE_DATA = true;
 
     DeribitExchangeManager *deribitEM = new DeribitExchangeManager();
     DeltaExchangeManager *deltaEM = new DeltaExchangeManager();
     OptionProcessor *optionProcessor = new OptionProcessor();
+    PCP_Strategy_0 *strategy = new PCP_Strategy_0();
 
     std::chrono::duration<double> durations[NUM_RUNS] = {};
     for (int i = 0; i < NUM_RUNS; i++)
@@ -78,14 +83,35 @@ int main()
             std::cerr << e.what();
         }
 
+        std::vector<OptionPair> candidates;
+        optionProcessor->createOptionPairs("BTC", deribitBTCOptionsVec, deltaBTCCallOptionsVec, deltaPutOptionsVec, candidates);
+        strategy->filterArbitrageOpportunities(candidates);
+
+        if (candidates.size() == 0)
+        {
+            std::cout << "No arbitrage opportunities found." << std::endl;
+        }
+        else
+        {
+            std::string candidatesStr = JsonProcessor::convertOptionPairsToString(candidates);
+            std::string formattedRes = JsonProcessor::formatJSON(candidatesStr);
+            std::ofstream file;
+            file.open("data/candidates.json");
+            file << formattedRes;
+            file.close();
+        }
+
         auto finish = std::chrono::high_resolution_clock::now();
         durations[i] = finish - start;
     }
 
     double sum = 0;
+    std::cout << "Number of runs: " << NUM_RUNS << std::endl;
     for (int i = 0; i < NUM_RUNS; i++)
     {
-        std::cout << "Execution time: " << durations[i].count() << ", NUM_RUNS: " << NUM_RUNS << std::endl;
+        std::cout << "(" << i << ")"
+                  << " execution time: "
+                  << durations[i].count() << std::endl;
         sum += durations[i].count();
     }
     std::cout << "Average execution time: " << sum / NUM_RUNS << std::endl;
