@@ -2,19 +2,19 @@
 
 BUILDDIR = build
 DATADIR = data
-EXECUTABLE = ./$(BUILDDIR)/churchill
+EXECUTABLE = ./build/churchill
 
 all: build
 
 build:
-	@mkdir -p $(BUILDDIR) $(DATADIR)
-	@cd $(BUILDDIR) && cmake .. && cmake --build .
+	@echo "Building churchill..."
+	@mkdir -p build data
+	@cd build && cmake .. && cmake --build .
+	@echo "Executing churchill..."
+	@$(EXECUTABLE)
 
 c:
-	@rm -rf $(BUILDDIR) $(DATADIR)
+	@rm -rf build data
 
 db:
 	docker build -t jakeweatherhead/churchill .
-
-run:
-	@$(EXECUTABLE)
