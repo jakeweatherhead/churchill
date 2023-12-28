@@ -44,3 +44,21 @@ void Toolkit::writeToFile(const std::string &filename, const std::string &data)
     file << formattedData;
     file.close();
 }
+
+void Toolkit::sortOptionPairsByReturnPerc(std::vector<OptionPair>& optionPairs) {
+    std::sort(optionPairs.begin(), optionPairs.end(), [](const OptionPair& a, const OptionPair& b) {
+        return a.returnPerc > b.returnPerc; // Sort in descending order
+    });
+}
+
+std::string Toolkit::toLower(const std::string& str) {
+    std::string lowerStr = str;
+    std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
+    return lowerStr;
+}
+
+std::string Toolkit::toUpper(const std::string& str) {
+    std::string upperStr = str;
+    std::transform(upperStr.begin(), upperStr.end(), upperStr.begin(), ::toupper);
+    return upperStr;
+}
