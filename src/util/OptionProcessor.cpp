@@ -39,20 +39,18 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         }
         catch (const std::exception &e)
         {
-            std::cerr << e.what();
             continue;
         }
 
         // Retrieve matching deribit option contract
-        std::string deribitEqvSymbol = ticker + "-" + deribitExpiration + "-" + strikeStr + "-" + deribitOptionType;
         DeribitOption deribitComplement;
+        std::string deribitEqvSymbol = ticker + "-" + deribitExpiration + "-" + strikeStr + "-" + deribitOptionType;
         try
         {
             deribitComplement = DeribitExchangeManager::findDeribitComplement(deribitOptions, deribitEqvSymbol);
         }
         catch (const std::exception &e)
         {
-            std::cerr << e.what();
             continue;
         }
 
@@ -86,10 +84,11 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         candidates.push_back(optionPair);
     }
     // Write candidates to file
-    // std::ofstream file;
-    // file.open("data/" + symbol + "_option_pairs.json");
-    // file << JsonProcessor::formatJSON(candidates);
-    // file.close();
+    std::ofstream file;
+    file.open("data/" + symbol + "_option_pairs.json");
+    std::string json = JsonProcessor::convertOptionPairsToString(candidates);
+    file << JsonProcessor::formatJSON(json);
+    file.close();
     return candidates;
 }
 
@@ -102,5 +101,5 @@ DeribitFutures OptionProcessor::findDeribitFutures(const std::vector<DeribitFutu
             return deribitFutures[i];
         }
     }
-    throw std::runtime_error("Could not find futures contract: " + futuresInstrumentName);
+    throw std::runtime_error("Could not find deribit futures contract: " + futuresInstrumentName + "\n");
 }

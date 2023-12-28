@@ -11,7 +11,7 @@ public:
     double estimated_delivery_price;
     double volume_notional;
     double volume_usd;
-    double quote_currency;
+    std::string quote_currency;
     double creation_timestamp;
     std::string base_currency;
     double volume;

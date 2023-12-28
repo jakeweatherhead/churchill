@@ -1,6 +1,7 @@
 #include "util/RestClient.h"
 #include "util/JsonProcessor.h"
 #include "util/OptionProcessor.h"
+#include "util/Toolkit.h"
 
 #include "DeribitExchange/DeribitExchangeManager.h"
 
@@ -28,31 +29,77 @@ int main()
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        auto dbtBtcFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcFutures, dbtEM, WRITE_DATA);
-        auto dbtBTCOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM, WRITE_DATA);
-        auto dbtETHFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM, WRITE_DATA);
-        auto dbtETHOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM, WRITE_DATA);
+        auto dbtBtcFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcFutures, dbtEM);
+        auto dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
 
-        auto dltCallOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options", WRITE_DATA);
-        auto dltPutOptionsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options", WRITE_DATA);
+        auto dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
+        auto dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
 
-        std::string dbtBtcFutures;
-        std::string dbtBtcOptions;
-        std::string dbtEthFutures;
-        std::string dbtEthOptions;
+        auto dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
+        auto dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
 
-        std::string dltCallOptions;
-        std::string dltPutOptions;
+        std::string dbtBtcFuturesResponse;
+        std::string dbtBtcOptionsResponse;
+
+        std::string dbtEthFuturesResponse;
+        std::string dbtEthOptionsResponse;
+
+        std::string dltCallOptionsResponse;
+        std::string dltPutOptionsResponse;
+
+        // Fetch data
+        try
+        {
+            dbtBtcFuturesResponse = dbtBtcFuturesFuture.get();
+            dbtBtcOptionsResponse = dbtBtcOptionsFuture.get();
+
+            dbtEthFuturesResponse = dbtEthFuturesFuture.get();
+            dbtEthOptionsResponse = dbtEthOptionsFuture.get();
+
+            dltCallOptionsResponse = dltCallsFuture.get();
+            dltPutOptionsResponse = dltPutsFuture.get();
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what();
+        }
+
+        Toolkit::writeToFile("data/dbt_btc_futures_res.json", dbtBtcFuturesResponse);
+        Toolkit::writeToFile("data/dbt_btc_options_res.json", dbtBtcOptionsResponse);
+
+        Toolkit::writeToFile("data/dbt_eth_futures_res.json", dbtEthFuturesResponse);
+        Toolkit::writeToFile("data/dbt_eth_options_res.json", dbtEthOptionsResponse);
+
+        Toolkit::writeToFile("data/dlt_call_options_res.json", dltCallOptionsResponse);
+        Toolkit::writeToFile("data/dlt_put_options_res.json", dltPutOptionsResponse);
+
+        //==--------------------------------------------------------------------==//
+
+        std::vector<DeribitFutures> dbtBtcFuturesVec;
+        std::vector<DeribitOption> dbtBtcOptionsVec;
+
+        std::vector<DeltaOption> dltBtcCallOptionsVec;
+        std::vector<DeltaOption> dltBtcPutOptionsVec;
+
+        std::vector<DeribitFutures> dbtEthFuturesVec;
+        std::vector<DeribitOption> dbtEthOptionsVec;
+
+        std::vector<DeltaOption> dltEthCallOptionsVec;
+        std::vector<DeltaOption> dltEthPutOptionsVec;
 
         try
         {
-            dbtBtcFutures = dbtBtcFuturesFuture.get();
-            dbtBtcOptions = dbtBTCOptionsFuture.get();
-            dbtEthFutures = dbtETHFuturesFuture.get();
-            dbtEthOptions = dbtETHOptionsFuture.get();
+            dbtBtcFuturesVec = dbtEM->parseFuturesToVector(dbtBtcFuturesResponse);
+            dbtBtcOptionsVec = dbtEM->parseOptionsToVector(dbtBtcOptionsResponse);
 
-            dltCallOptions = dltCallOptionsFuture.get();
-            dltPutOptions = dltPutOptionsFuture.get();
+            dltBtcCallOptionsVec = dltEM->parseOptionsToVector("BTC", dltCallOptionsResponse);
+            dltBtcPutOptionsVec = dltEM->parseOptionsToVector("BTC", dltPutOptionsResponse);
+
+            dbtEthFuturesVec = dbtEM->parseFuturesToVector(dbtEthFuturesResponse);
+            dbtEthOptionsVec = dbtEM->parseOptionsToVector(dbtEthOptionsResponse);
+
+            dltEthCallOptionsVec = dltEM->parseOptionsToVector("ETH", dltCallOptionsResponse);
+            dltEthPutOptionsVec = dltEM->parseOptionsToVector("ETH", dltPutOptionsResponse);
         }
         catch (const std::exception &e)
         {
@@ -61,47 +108,14 @@ int main()
 
         //==--------------------------------------------------------------------==//
 
-        std::vector<DeribitFutures> dbtBtcFuturesVec;
-        std::vector<DeribitOption> dbtBtcOptionsVec;
-
-        std::vector<DeribitFutures> dbtEthFuturesVec;
-        std::vector<DeribitOption> dbtEthOptionsVec;
-
-        std::vector<DeltaOption> dltBtcCallOptionsVec;
-        std::vector<DeltaOption> dltBtcPutOptionsVec;
-
-        std::vector<DeltaOption> dltEthCallOptionsVec;
-        std::vector<DeltaOption> dltEthPutOptionsVec;
-
-        try
-        {
-            dbtEM->parseFuturesToVector(dbtBtcFutures, dbtBtcFuturesVec);
-            dbtEM->parseOptionsToVector(dbtBtcOptions, dbtBtcOptionsVec);
-
-            dbtEM->parseFuturesToVector(dbtEthFutures, dbtEthFuturesVec);
-            dbtEM->parseOptionsToVector(dbtEthOptions, dbtEthOptionsVec);
-
-            dltEM->parseOptionsToVector("BTC", dltCallOptions, dltBtcCallOptionsVec);
-            dltEM->parseOptionsToVector("BTC", dltPutOptions, dltBtcPutOptionsVec);
-
-            dltEM->parseOptionsToVector("ETH", dltCallOptions, dltEthCallOptionsVec);
-            dltEM->parseOptionsToVector("ETH", dltPutOptions, dltEthPutOptionsVec);
-        }
-        catch (const std::exception &e)
-        {
-            std::cerr << e.what();
-        }
-
-        // Combine delta options (BTC)
+        // Combine delta puts and calls
         std::vector<DeltaOption> dltBtcOptionsVec = dltBtcCallOptionsVec;
         dltBtcOptionsVec.insert(dltBtcOptionsVec.end(), dltBtcPutOptionsVec.begin(), dltBtcPutOptionsVec.end());
 
-        // Combine delta options (ETH)
-        std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
-        dltEthOptionsVec.insert(dltEthOptionsVec.end(), dltEthPutOptionsVec.begin(), dltEthPutOptionsVec.end());
-
-        // Process BTC candidates
+        // Pair matching puts and calls
         std::vector<OptionPair> btcCandidates = optionProcessor->createOptionPairs("BTC", dbtBtcOptionsVec, dltBtcOptionsVec, dbtBtcFuturesVec);
+
+        // Filter profitable opportunities
         strategy->filterArbitrageOpportunities(btcCandidates);
 
         if (btcCandidates.size() == 0)
@@ -111,15 +125,20 @@ int main()
         else
         {
             std::string btcCandidatesStr = JsonProcessor::convertOptionPairsToString(btcCandidates);
-            std::string formattedRes = JsonProcessor::formatJSON(btcCandidatesStr);
-            std::ofstream file;
-            file.open("data/candidates.json");
-            file << formattedRes;
-            file.close();
+            Toolkit::writeToFile("data/btc_ops.json", btcCandidatesStr);
         }
 
-        // Process ETH candidates
+        //==--------------------------------------------------------------------==//
+
+
+        // Combine delta puts and calls
+        std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
+        dltEthOptionsVec.insert(dltEthOptionsVec.end(), dltEthPutOptionsVec.begin(), dltEthPutOptionsVec.end());
+
+        // Pair matching puts and calls
         std::vector<OptionPair> ethCandidates = optionProcessor->createOptionPairs("ETH", dbtEthOptionsVec, dltEthOptionsVec, dbtEthFuturesVec);
+
+        // Filter profitable opportunities
         strategy->filterArbitrageOpportunities(ethCandidates);
 
         if (ethCandidates.size() == 0)
@@ -129,23 +148,23 @@ int main()
         else
         {
             std::string ethCandidatesStr = JsonProcessor::convertOptionPairsToString(ethCandidates);
-            std::string formattedRes = JsonProcessor::formatJSON(ethCandidatesStr);
-            std::ofstream file;
-            file.open("data/candidates.json");
-            file << formattedRes;
-            file.close();
+            Toolkit::writeToFile("data/eth_ops.json", ethCandidatesStr);
         }
+
+        //==--------------------------------------==//
 
         auto finish = std::chrono::high_resolution_clock::now();
         durations[i] = finish - start;
     }
+
+    //==--------------------------------------------------------------------==//
 
     // Get performance metrics
     double sum = 0;
     std::cout << "Number of runs: " << NUM_RUNS << std::endl;
     for (int i = 0; i < NUM_RUNS; i++)
     {
-        std::cout << "(" << i << ")"
+        std::cout << "(Run-" << i << ")"
                   << " execution time: "
                   << durations[i].count() << std::endl;
         sum += durations[i].count();

@@ -1,4 +1,5 @@
 #include "util/Toolkit.h"
+#include "util/JsonProcessor.h"
 
 #include <stdexcept>
 
@@ -33,4 +34,13 @@ std::string Toolkit::convertDeltaExpirationToDeribit(const std::string &dltExpir
 
     std::string deribitExpiration = dayStr + months[monthIndex] + yearStr;
     return deribitExpiration;
+}
+
+void Toolkit::writeToFile(const std::string &filename, const std::string &data)
+{
+    std::ofstream file;
+    file.open(filename);
+    std::string formattedData = JsonProcessor::formatJSON(data);
+    file << formattedData;
+    file.close();
 }

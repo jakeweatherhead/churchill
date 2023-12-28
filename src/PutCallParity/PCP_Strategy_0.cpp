@@ -19,7 +19,7 @@ std::vector<OptionPair> PCP_Strategy_0::filterArbitrageOpportunities(std::vector
 void PCP_Strategy_0::setCapitalRequired(OptionPair &optionPair)
 {
     optionPair.capitalRequired = optionPair.callPrice;
-    optionPair.capitalRequired += optionPair.makerFee; 
+    optionPair.capitalRequired += optionPair.makerFee;
     optionPair.capitalRequired += optionPair.takerFee;
     optionPair.capitalRequired += optionPair.deribitFuturesMidPrice;
 }

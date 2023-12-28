@@ -28,24 +28,24 @@ std::string JsonProcessor::formatJSON(const std::string &jsonStr)
     return formatted;
 }
 
-double JsonProcessor::parseNumber(json_t *value)
+double JsonProcessor::parseNumber(json_t *value, std::string fieldName)
 {
-    if (!value)
+    if (!value || json_is_null(value))
     {
-        throw std::runtime_error("json_t value to be parsed to number is null");
+        return 0.0;
     }
     else if (!json_is_number(value))
     {
-        throw std::runtime_error("json_t value to be parsed to number is not an object");
+        throw std::runtime_error("json_t value " + fieldName + " is not a number\n");
     }
     return json_number_value(value);
 }
 
 int JsonProcessor::parseInteger(json_t *value)
 {
-    if (!value)
+    if (!value || json_is_null(value))
     {
-        throw std::runtime_error("json_t value to be parsed to integer is null");
+        return 0;
     }
     else if (!json_is_integer(value))
     {
@@ -56,9 +56,9 @@ int JsonProcessor::parseInteger(json_t *value)
 
 std::string JsonProcessor::parseString(json_t *value)
 {
-    if (!value)
+    if (!value || json_is_null(value))
     {
-        throw std::runtime_error("json_t value to be parsed to string is null");
+        return "null";
     }
     else if (!json_is_string(value))
     {

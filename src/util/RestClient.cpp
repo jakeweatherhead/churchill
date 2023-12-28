@@ -3,13 +3,9 @@
 #include <iostream>
 #include <stdexcept>
 
-RestClient::RestClient()
-{
-}
+RestClient::RestClient() {}
 
-RestClient::~RestClient()
-{
-}
+RestClient::~RestClient() {}
 
 size_t RestClient::WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp)
 {
@@ -23,7 +19,7 @@ std::string RestClient::HTTP_GET(const std::string &url)
     CURL *curl = curl_easy_init();
     if (!curl)
     {
-        throw std::runtime_error("[RestClient.cpp] Failed to initialize curl handle\n");
+        throw std::runtime_error("Failed to initialize curl handle\n");
         return "";
     }
 
@@ -35,7 +31,7 @@ std::string RestClient::HTTP_GET(const std::string &url)
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK)
     {
-        std::cerr << "[RestClient.cpp] curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
     }
     curl_easy_cleanup(curl);
     return readBuffer;
