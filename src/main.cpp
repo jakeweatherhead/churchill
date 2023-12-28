@@ -67,6 +67,7 @@ int main()
         Toolkit::writeToFile("data/dlt_put_options_res.json", dltPutOptionsResponse);
 
         //==--------------------------------------------------------------------==//
+        // Parse response data to vectors
 
         std::vector<DeribitFutures> dbtBtcFuturesVec;
         std::vector<DeribitOption> dbtBtcOptionsVec;
@@ -94,6 +95,7 @@ int main()
         }
 
         //==--------------------------------------------------------------------==//
+        // Analyse BTC data
 
         std::vector<DeltaOption> dltBtcOptionsVec = dltBtcCallOptionsVec;
         dltBtcOptionsVec.insert(dltBtcOptionsVec.end(), dltBtcPutOptionsVec.begin(), dltBtcPutOptionsVec.end());
@@ -112,6 +114,7 @@ int main()
         }
 
         //==--------------------------------------------------------------------==//
+        // Analyse ETH data
 
         std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
         dltEthOptionsVec.insert(dltEthOptionsVec.end(), dltEthPutOptionsVec.begin(), dltEthPutOptionsVec.end());
@@ -136,8 +139,8 @@ int main()
     }
 
     //==--------------------------------------------------------------------==//
+    // Print performance metrics
 
-    // Get performance metrics
     double sum = 0;
     std::cout << "Number of runs: " << NUM_RUNS << std::endl;
     for (int i = 0; i < NUM_RUNS; i++)
