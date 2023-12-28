@@ -88,3 +88,57 @@ std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPa
     }
     return j.dump();
 }
+
+std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOption> &options) {
+    nlohmann::json j;
+    for (const auto &option : options) {
+        nlohmann::json jOption;
+        jOption["close"] = option.close;
+        jOption["contract_type"] = option.contract_type;
+        jOption["greeks"] = {
+            {"delta", option.greeks.delta},
+            {"gamma", option.greeks.gamma},
+            {"rho", option.greeks.rho},
+            {"theta", option.greeks.theta},
+            {"vega", option.greeks.vega}
+        };
+        jOption["high"] = option.high;
+        jOption["low"] = option.low;
+        jOption["mark_price"] = option.mark_price;
+        jOption["mark_vol"] = option.mark_vol;
+        jOption["oi"] = option.oi;
+        jOption["oi_change_usd_6h"] = option.oi_change_usd_6h;
+        jOption["oi_contracts"] = option.oi_contracts;
+        jOption["oi_value"] = option.oi_value;
+        jOption["oi_value_symbol"] = option.oi_value_symbol;
+        jOption["oi_value_usd"] = option.oi_value_usd;
+        jOption["open"] = option.open;
+        jOption["price_band"] = {
+            {"lower_limit", option.price_band.lower_limit},
+            {"upper_limit", option.price_band.upper_limit}
+        };
+        jOption["product_id"] = option.product_id;
+        jOption["quotes"] = {
+            {"ask_iv", option.quotes.ask_iv},
+            {"ask_size", option.quotes.ask_size},
+            {"best_ask", option.quotes.best_ask},
+            {"best_bid", option.quotes.best_bid},
+            {"bid_iv", option.quotes.bid_iv},
+            {"bid_size", option.quotes.bid_size},
+            {"impact_mid_price", option.quotes.impact_mid_price},
+            {"mark_iv", option.quotes.mark_iv}
+        };
+        jOption["size"] = option.size;
+        jOption["spot_price"] = option.spot_price;
+        jOption["strike_price"] = option.strike_price;
+        jOption["symbol"] = option.symbol;
+        jOption["timestamp"] = option.timestamp;
+        jOption["turnover"] = option.turnover;
+        jOption["turnover_symbol"] = option.turnover_symbol;
+        jOption["turnover_usd"] = option.turnover_usd;
+        jOption["volume"] = option.volume;
+
+        j.push_back(jOption);
+    }
+    return j.dump();
+}
