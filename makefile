@@ -16,5 +16,8 @@ build:
 c:
 	@rm -rf build data
 
+v:
+	valgrind --leak-check=full --track-origins=yes $(EXECUTABLE)
+
 db:
 	docker build -t jakeweatherhead/churchill .
