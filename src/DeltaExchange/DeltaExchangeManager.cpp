@@ -35,13 +35,6 @@ std::vector<DeltaOption> DeltaExchangeManager::parseOptionsToVector(const std::s
     }
 
     json_t *result = json_object_get(root, "result");
-    // char* str = json_dumps(result, JSON_INDENT(2));  // Pretty print with 2 spaces indentation
-    // if (str) {
-    //     std::cout << str << std::endl;
-    //     free(str);  // Free the string after use
-    // } else {
-    //     std::cerr << "Failed to serialize JSON object" << std::endl;
-    // }
     if (!result || !json_is_array(result))
     {
         json_decref(root);
