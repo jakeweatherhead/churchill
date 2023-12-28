@@ -124,12 +124,12 @@ int main()
         }
         else
         {
+            Toolkit::sortOptionPairsByReturnPerc(btcCandidates);
             std::string btcCandidatesStr = JsonProcessor::convertOptionPairsToString(btcCandidates);
             Toolkit::writeToFile("data/btc_ops.json", btcCandidatesStr);
         }
 
         //==--------------------------------------------------------------------==//
-
 
         // Combine delta puts and calls
         std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
@@ -147,6 +147,7 @@ int main()
         }
         else
         {
+            Toolkit::sortOptionPairsByReturnPerc(ethCandidates);
             std::string ethCandidatesStr = JsonProcessor::convertOptionPairsToString(ethCandidates);
             Toolkit::writeToFile("data/eth_ops.json", ethCandidatesStr);
         }
@@ -164,9 +165,10 @@ int main()
     std::cout << "Number of runs: " << NUM_RUNS << std::endl;
     for (int i = 0; i < NUM_RUNS; i++)
     {
-        std::cout << "(Run-" << i << ")"
+        std::cout << "Run-" << i
                   << " execution time: "
-                  << durations[i].count() << std::endl;
+                  << durations[i].count()
+                  << std::endl;
         sum += durations[i].count();
     }
     std::cout << "Average execution time: " << sum / NUM_RUNS << std::endl;
