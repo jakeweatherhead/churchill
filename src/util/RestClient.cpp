@@ -36,5 +36,3 @@ std::string RestClient::HTTP_GET(const std::string &url)
     curl_easy_cleanup(curl);
     return readBuffer;
 }
-
-// TODO: Implement HTTP_POST
