@@ -10,7 +10,8 @@ RUN apt-get update \
   gcc \
   g++ \
   cmake \
-  ca-certificates
+  ca-certificates \
+  valgrind
 
 WORKDIR /churchill
 
