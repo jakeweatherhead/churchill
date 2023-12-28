@@ -8,7 +8,7 @@ DeltaExchangeManager::~DeltaExchangeManager() {}
 
 std::string DeltaExchangeManager::fetchOptions(std::string optionType)
 {
-    static const std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
+    std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
 
     std::string res;
     try
