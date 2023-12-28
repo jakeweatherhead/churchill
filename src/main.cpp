@@ -17,45 +17,39 @@
 int main()
 {
     int NUM_RUNS = 1;
-    bool WRITE_DATA = true;
+    std::chrono::duration<double> durations[NUM_RUNS] = {};
 
     DeribitExchangeManager *dbtEM = new DeribitExchangeManager();
     DeltaExchangeManager *dltEM = new DeltaExchangeManager();
     OptionProcessor *optionProcessor = new OptionProcessor();
     PCP_Strategy_0 *strategy = new PCP_Strategy_0();
 
-    std::chrono::duration<double> durations[NUM_RUNS] = {};
     for (int i = 0; i < NUM_RUNS; i++)
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        auto dbtBtcFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcFutures, dbtEM);
-        auto dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
-
-        auto dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
-        auto dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
-
-        auto dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
-        auto dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
-
         std::string dbtBtcFuturesResponse;
         std::string dbtBtcOptionsResponse;
-
         std::string dbtEthFuturesResponse;
         std::string dbtEthOptionsResponse;
-
         std::string dltCallOptionsResponse;
         std::string dltPutOptionsResponse;
 
-        // Fetch data
+        // Fetch data from exchanges
+        auto dbtBtcFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcFutures, dbtEM);
+        auto dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
+        auto dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
+        auto dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
+        auto dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
+        auto dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
+
+        // Retrieve response 
         try
         {
             dbtBtcFuturesResponse = dbtBtcFuturesFuture.get();
             dbtBtcOptionsResponse = dbtBtcOptionsFuture.get();
-
             dbtEthFuturesResponse = dbtEthFuturesFuture.get();
             dbtEthOptionsResponse = dbtEthOptionsFuture.get();
-
             dltCallOptionsResponse = dltCallsFuture.get();
             dltPutOptionsResponse = dltPutsFuture.get();
         }
@@ -64,12 +58,11 @@ int main()
             std::cerr << e.what();
         }
 
+        // Write response data
         Toolkit::writeToFile("data/dbt_btc_futures_res.json", dbtBtcFuturesResponse);
         Toolkit::writeToFile("data/dbt_btc_options_res.json", dbtBtcOptionsResponse);
-
         Toolkit::writeToFile("data/dbt_eth_futures_res.json", dbtEthFuturesResponse);
         Toolkit::writeToFile("data/dbt_eth_options_res.json", dbtEthOptionsResponse);
-
         Toolkit::writeToFile("data/dlt_call_options_res.json", dltCallOptionsResponse);
         Toolkit::writeToFile("data/dlt_put_options_res.json", dltPutOptionsResponse);
 
@@ -77,13 +70,10 @@ int main()
 
         std::vector<DeribitFutures> dbtBtcFuturesVec;
         std::vector<DeribitOption> dbtBtcOptionsVec;
-
         std::vector<DeltaOption> dltBtcCallOptionsVec;
         std::vector<DeltaOption> dltBtcPutOptionsVec;
-
         std::vector<DeribitFutures> dbtEthFuturesVec;
         std::vector<DeribitOption> dbtEthOptionsVec;
-
         std::vector<DeltaOption> dltEthCallOptionsVec;
         std::vector<DeltaOption> dltEthPutOptionsVec;
 
@@ -91,13 +81,10 @@ int main()
         {
             dbtBtcFuturesVec = dbtEM->parseFuturesToVector(dbtBtcFuturesResponse);
             dbtBtcOptionsVec = dbtEM->parseOptionsToVector(dbtBtcOptionsResponse);
-
             dltBtcCallOptionsVec = dltEM->parseOptionsToVector("BTC", dltCallOptionsResponse);
             dltBtcPutOptionsVec = dltEM->parseOptionsToVector("BTC", dltPutOptionsResponse);
-
             dbtEthFuturesVec = dbtEM->parseFuturesToVector(dbtEthFuturesResponse);
             dbtEthOptionsVec = dbtEM->parseOptionsToVector(dbtEthOptionsResponse);
-
             dltEthCallOptionsVec = dltEM->parseOptionsToVector("ETH", dltCallOptionsResponse);
             dltEthPutOptionsVec = dltEM->parseOptionsToVector("ETH", dltPutOptionsResponse);
         }
@@ -108,14 +95,9 @@ int main()
 
         //==--------------------------------------------------------------------==//
 
-        // Combine delta puts and calls
         std::vector<DeltaOption> dltBtcOptionsVec = dltBtcCallOptionsVec;
         dltBtcOptionsVec.insert(dltBtcOptionsVec.end(), dltBtcPutOptionsVec.begin(), dltBtcPutOptionsVec.end());
-
-        // Pair matching puts and calls
         std::vector<OptionPair> btcCandidates = optionProcessor->createOptionPairs("BTC", dbtBtcOptionsVec, dltBtcOptionsVec, dbtBtcFuturesVec);
-
-        // Filter profitable opportunities
         strategy->filterArbitrageOpportunities(btcCandidates);
 
         if (btcCandidates.size() == 0)
@@ -131,14 +113,9 @@ int main()
 
         //==--------------------------------------------------------------------==//
 
-        // Combine delta puts and calls
         std::vector<DeltaOption> dltEthOptionsVec = dltEthCallOptionsVec;
         dltEthOptionsVec.insert(dltEthOptionsVec.end(), dltEthPutOptionsVec.begin(), dltEthPutOptionsVec.end());
-
-        // Pair matching puts and calls
         std::vector<OptionPair> ethCandidates = optionProcessor->createOptionPairs("ETH", dbtEthOptionsVec, dltEthOptionsVec, dbtEthFuturesVec);
-
-        // Filter profitable opportunities
         strategy->filterArbitrageOpportunities(ethCandidates);
 
         if (ethCandidates.size() == 0)
@@ -175,4 +152,6 @@ int main()
 
     delete dbtEM;
     delete dltEM;
+    delete optionProcessor;
+    delete strategy;
 }
