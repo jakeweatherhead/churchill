@@ -73,7 +73,7 @@ std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPa
     for (const auto &candidate : candidates)
     {
         nlohmann::json jCandidate;
-        jCandidate["deltaSymbol"] = candidate.deribitSymbol;
+        jCandidate["deltaSymbol"] = candidate.deltaSymbol;
         jCandidate["deribitSymbol"] = candidate.deribitSymbol;
         jCandidate["callPrice"] = candidate.callPrice;
         jCandidate["makerFee"] = candidate.makerFee;
