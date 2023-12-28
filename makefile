@@ -19,5 +19,8 @@ c:
 v:
 	valgrind --leak-check=full --track-origins=yes $(EXECUTABLE)
 
+callgrind:
+	valgrind --tool=callgrind $(EXECUTABLE)
+
 db:
 	docker build -t jakeweatherhead/churchill .
