@@ -54,7 +54,7 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
             continue;
         }
 
-        // Calculate profit
+        // Calculate profit components
         double callPrice =
             deltaOptionType == "C"
                 ? std::stod(deltaOptions[i].quotes.best_bid)
@@ -83,9 +83,10 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         };
         candidates.push_back(optionPair);
     }
+
     // Write candidates to file
     std::ofstream file;
-    file.open("data/" + symbol + "_option_pairs.json");
+    file.open("data/" + Toolkit::toLower(symbol) + "_option_pairs.json");
     std::string json = JsonProcessor::convertOptionPairsToString(candidates);
     file << JsonProcessor::formatJSON(json);
     file.close();
