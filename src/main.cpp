@@ -19,7 +19,7 @@ std::chrono::duration<double> durations[NUM_RUNS] = {};
 DeribitExchangeManager *dbtEM = new DeribitExchangeManager();
 DeltaExchangeManager *dltEM = new DeltaExchangeManager();
 OptionProcessor *optionProcessor = new OptionProcessor();
-PCP_Strategy_0 *strategy = new PCP_Strategy_0();
+PCP_Strategy_0 *pcpStrategy_0 = new PCP_Strategy_0();
 std::vector<OptionPair> btcCandidates;
 std::vector<OptionPair> ethCandidates;
 
@@ -88,12 +88,12 @@ ExchangeDataResponses retrieveResponses(ExchangeDataFutures &futures)
 
 void writeResponses(ExchangeDataResponses &responses)
 {
-    Toolkit::writeToFile("data/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
-    Toolkit::writeToFile("data/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
-    Toolkit::writeToFile("data/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
-    Toolkit::writeToFile("data/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
-    Toolkit::writeToFile("data/dlt_call_options_res.json", responses.dltCallOptionsResponse);
-    Toolkit::writeToFile("data/dlt_put_options_res.json", responses.dltPutOptionsResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dlt_call_options_res.json", responses.dltCallOptionsResponse);
+    Toolkit::writeToFile("data/pcp_0/res/dlt_put_options_res.json", responses.dltPutOptionsResponse);
 }
 
 ExchangeDataVectors parseResponsesToVectors(ExchangeDataResponses &responses)
@@ -123,7 +123,7 @@ void analyseBtcData(ExchangeDataVectors &vectors)
     std::vector<DeltaOption> dltOptionsVec = vectors.dltBtcCallOptionsVec;
     dltOptionsVec.insert(dltOptionsVec.end(), vectors.dltBtcPutOptionsVec.begin(), vectors.dltBtcPutOptionsVec.end());
     btcCandidates = optionProcessor->createOptionPairs("BTC", vectors.dbtBtcOptionsVec, dltOptionsVec, vectors.dbtBtcFuturesVec);
-    strategy->filterArbitrageOpportunities(btcCandidates);
+    pcpStrategy_0->filterArbitrageOpportunities(btcCandidates);
 
     if (btcCandidates.size() == 0)
     {
@@ -133,7 +133,7 @@ void analyseBtcData(ExchangeDataVectors &vectors)
     {
         Toolkit::sortOptionPairsByReturnPerc(btcCandidates);
         std::string candidates = JsonProcessor::convertOptionPairsToString(btcCandidates);
-        std::string filename = "data/BTC_ops.json";
+        std::string filename = "data/pcp_0/arb/BTC_ops.json";
         Toolkit::writeToFile(filename, candidates);
     }
 }
@@ -143,7 +143,7 @@ void analyseEthData(ExchangeDataVectors &vectors)
     std::vector<DeltaOption> dltOptionsVec = vectors.dltEthCallOptionsVec;
     dltOptionsVec.insert(dltOptionsVec.end(), vectors.dltEthPutOptionsVec.begin(), vectors.dltEthPutOptionsVec.end());
     ethCandidates = optionProcessor->createOptionPairs("ETH", vectors.dbtEthOptionsVec, dltOptionsVec, vectors.dbtEthFuturesVec);
-    strategy->filterArbitrageOpportunities(ethCandidates);
+    pcpStrategy_0->filterArbitrageOpportunities(ethCandidates);
 
     if (ethCandidates.size() == 0)
     {
@@ -153,7 +153,7 @@ void analyseEthData(ExchangeDataVectors &vectors)
     {
         Toolkit::sortOptionPairsByReturnPerc(ethCandidates);
         std::string candidates = JsonProcessor::convertOptionPairsToString(ethCandidates);
-        std::string filename = "data/ETH_ops.json";
+        std::string filename = "data/pcp_0/arb/ETH_ops.json";
         Toolkit::writeToFile(filename, candidates);
     }
 }
@@ -170,7 +170,7 @@ void freeMemory()
     delete dbtEM;
     delete dltEM;
     delete optionProcessor;
-    delete strategy;
+    delete pcpStrategy_0;
 }
 
 int main()
