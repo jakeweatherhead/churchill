@@ -8,7 +8,7 @@ all: build
 
 build:
 	@echo "Building churchill..."
-	@mkdir -p build data
+	@mkdir -p build data/pcp_0/res data/pcp_0/arb data/pcp_1/res data/pcp_1/arb
 	@cd build && cmake .. && cmake --build .
 	@echo "Executing churchill..."
 	@$(EXECUTABLE)
