@@ -83,13 +83,6 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         };
         candidates.push_back(optionPair);
     }
-
-    // Write candidates to file
-    std::ofstream file;
-    file.open("data/" + Toolkit::toLower(symbol) + "_option_pairs.json");
-    std::string json = JsonProcessor::convertOptionPairsToString(candidates);
-    file << JsonProcessor::formatJSON(json);
-    file.close();
     return candidates;
 }
 
