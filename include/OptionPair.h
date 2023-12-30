@@ -9,9 +9,11 @@ public:
     std::string deltaSymbol;
     std::string deribitSymbol;
     double callPrice;
+    std::string callCurrency;
     double makerFee;
     double strike;
     double putPrice;
+    std::string putCurrency;
     double takerFee;
     double deribitFuturesMidPrice;
     double capitalRequired;
