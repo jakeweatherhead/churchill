@@ -14,7 +14,7 @@
 #include <chrono>
 #include <future>
 
-const int NUM_RUNS = 10;
+const int NUM_RUNS = 1;
 std::chrono::duration<double> durations[NUM_RUNS] = {};
 DeribitExchangeManager *dbtEM = new DeribitExchangeManager();
 DeltaExchangeManager *dltEM = new DeltaExchangeManager();
@@ -62,6 +62,7 @@ ExchangeDataFutures fetchData()
     futures.dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
     futures.dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
     futures.dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
+    
     futures.dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
     futures.dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
     return futures;
@@ -123,7 +124,7 @@ void analyseBtcData(ExchangeDataVectors &vectors)
     std::vector<DeltaOption> dltOptionsVec = vectors.dltBtcCallOptionsVec;
     dltOptionsVec.insert(dltOptionsVec.end(), vectors.dltBtcPutOptionsVec.begin(), vectors.dltBtcPutOptionsVec.end());
     btcCandidates = optionProcessor->createOptionPairs("BTC", vectors.dbtBtcOptionsVec, dltOptionsVec, vectors.dbtBtcFuturesVec);
-    pcpStrategy_0->filterArbitrageOpportunities(btcCandidates);
+    btcCandidates = pcpStrategy_0->filterArbitrageOpportunities(btcCandidates);
 
     if (btcCandidates.size() == 0)
     {
@@ -143,7 +144,7 @@ void analyseEthData(ExchangeDataVectors &vectors)
     std::vector<DeltaOption> dltOptionsVec = vectors.dltEthCallOptionsVec;
     dltOptionsVec.insert(dltOptionsVec.end(), vectors.dltEthPutOptionsVec.begin(), vectors.dltEthPutOptionsVec.end());
     ethCandidates = optionProcessor->createOptionPairs("ETH", vectors.dbtEthOptionsVec, dltOptionsVec, vectors.dbtEthFuturesVec);
-    pcpStrategy_0->filterArbitrageOpportunities(ethCandidates);
+    ethCandidates = pcpStrategy_0->filterArbitrageOpportunities(ethCandidates);
 
     if (ethCandidates.size() == 0)
     {

@@ -8,7 +8,7 @@ std::vector<OptionPair> PCP_Strategy_0::filterArbitrageOpportunities(std::vector
         setCapitalRequired(optionPair);
         setProfit(optionPair);
         setReturnPerc(optionPair);
-        if (returnIsSufficient(optionPair))
+        if (returnIsSufficient(optionPair) && optionPair.callPrice != 0.00 && optionPair.putPrice != 0.0)
         {
             optionPairs.push_back(optionPair);
         }
