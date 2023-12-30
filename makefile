@@ -29,4 +29,5 @@ kcachegrind:
 	eval $$(dbus-launch --sh-syntax) && kcachegrind callgrind.out.*
 
 db:
-	docker build -t jakeweatherhead/churchill .
+	@docker build -t jakeweatherhead/churchill .
+	@docker run -it jakeweatherhead/churchill:latest
