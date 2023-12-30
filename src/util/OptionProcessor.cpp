@@ -68,13 +68,19 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         double makerFee = 0.0003 * callPrice;
         double takerFee = 0.0003 * putPrice;
 
+        // Parse quote_currencies
+        std::string callCurrency = deltaOptionType == "C" ? "USDT" : symbol;
+        std::string putCurrency = deltaOptionType == "P" ? "USDT" : symbol;
+
         OptionPair optionPair = {
             deltaSymbol,
             deribitEqvSymbol,
             callPrice,
+            callCurrency,
             makerFee,
             strike,
             putPrice,
+            putCurrency,
             takerFee,
             futuresContract.mid_price,
             0.0, // capitalRequired

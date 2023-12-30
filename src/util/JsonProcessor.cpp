@@ -69,16 +69,18 @@ std::string JsonProcessor::parseString(json_t *value)
 
 std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPair> &candidates)
 {
-    nlohmann::json j;
+    nlohmann::ordered_json j;
     for (const auto &candidate : candidates)
     {
-        nlohmann::json jCandidate;
+        nlohmann::ordered_json jCandidate;
         jCandidate["deltaSymbol"] = candidate.deltaSymbol;
         jCandidate["deribitSymbol"] = candidate.deribitSymbol;
         jCandidate["callPrice"] = candidate.callPrice;
+        jCandidate["callCurrency"] = candidate.callCurrency;
         jCandidate["makerFee"] = candidate.makerFee;
         jCandidate["strike"] = candidate.strike;
         jCandidate["putPrice"] = candidate.putPrice;
+        jCandidate["putCurrency"] = candidate.putCurrency;
         jCandidate["takerFee"] = candidate.takerFee;
         jCandidate["deribitFuturesMidPrice"] = candidate.deribitFuturesMidPrice;
         jCandidate["capitalRequired"] = candidate.capitalRequired;
