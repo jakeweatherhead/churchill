@@ -13,6 +13,25 @@
 #include <iostream>
 #include <chrono>
 #include <future>
+#include <thread>
+
+std::string BLACK = "\033[0;30m";
+std::string RED = "\033[0;31m";
+std::string GREEN = "\033[0;32m";
+std::string YELLOW = "\033[0;33m";
+std::string BLUE = "\033[0;34m";
+std::string MAGENTA = "\033[0;35m";
+std::string CYAN = "\033[0;36m";
+std::string WHITE = "\033[0;37m";
+std::string B_BLACK = "\033[1;30m";
+std::string B_RED = "\033[1;31m";
+std::string B_GREEN = "\033[1;32m";
+std::string B_YELLOW = "\033[1;33m";
+std::string B_BLUE = "\033[1;34m";
+std::string B_MAGENTA = "\033[1;35m";
+std::string B_CYAN = "\033[1;36m";
+std::string B_WHITE = "\033[1;37m";
+std::string RESET = "\033[0m\n";
 
 const int NUM_RUNS = 1;
 std::chrono::duration<double> durations[NUM_RUNS] = {};
@@ -62,7 +81,7 @@ ExchangeDataFutures fetchData()
     futures.dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
     futures.dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
     futures.dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
-    
+
     futures.dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
     futures.dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
     return futures;
@@ -89,12 +108,24 @@ ExchangeDataResponses retrieveResponses(ExchangeDataFutures &futures)
 
 void writeResponses(ExchangeDataResponses &responses)
 {
-    Toolkit::writeToFile("data/pcp_0/res/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
-    Toolkit::writeToFile("data/pcp_0/res/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
-    Toolkit::writeToFile("data/pcp_0/res/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
-    Toolkit::writeToFile("data/pcp_0/res/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
-    Toolkit::writeToFile("data/pcp_0/res/dlt_call_options_res.json", responses.dltCallOptionsResponse);
-    Toolkit::writeToFile("data/pcp_0/res/dlt_put_options_res.json", responses.dltPutOptionsResponse);
+    std::vector<std::thread> threads;
+
+    // Spawn threads for each file write operation
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dlt_call_options_res.json", responses.dltCallOptionsResponse);
+    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dlt_put_options_res.json", responses.dltPutOptionsResponse);
+
+    // Wait for all threads to finish
+    for (auto &t : threads)
+    {
+        if (t.joinable())
+        {
+            t.join();
+        }
+    }
 }
 
 ExchangeDataVectors parseResponsesToVectors(ExchangeDataResponses &responses)
@@ -178,49 +209,49 @@ int main()
 {
     for (int i = 0; i < NUM_RUNS; i++)
     {
-
-        std::cout << "-----------------------------------------------\n";
-        auto s = std::chrono::high_resolution_clock::now(); // <-- start of full execution
-
         auto start = std::chrono::high_resolution_clock::now();
-        ExchangeDataFutures futures = fetchData(); // <--
+
+        std::chrono::duration<double> subdurations[6] = {};
+
+        auto s = std::chrono::high_resolution_clock::now();
+        ExchangeDataFutures futures = fetchData();
+        auto f = std::chrono::high_resolution_clock::now();
+        subdurations[0] = f - s;
+        std::cout << "fetchData(): " << YELLOW << subdurations[0].count() << " seconds" << RESET;
+
+        s = std::chrono::high_resolution_clock::now();
+        ExchangeDataResponses responses = retrieveResponses(futures);
+        f = std::chrono::high_resolution_clock::now();
+        subdurations[1] = f - s;
+        std::cout << "retrieveResponses(): " << YELLOW << subdurations[1].count() << " seconds" << RESET;
+
+        s = std::chrono::high_resolution_clock::now();
+        writeResponses(responses);
+        f = std::chrono::high_resolution_clock::now();
+        subdurations[2] = f - s;
+        std::cout << "writeResponses(): " << YELLOW << subdurations[2].count() << " seconds" << RESET;
+
+        s = std::chrono::high_resolution_clock::now();
+        ExchangeDataVectors vectors = parseResponsesToVectors(responses);
+        f = std::chrono::high_resolution_clock::now();
+        subdurations[3] = f - s;
+        std::cout << "parseResponsesToVectors(): " << YELLOW << subdurations[3].count() << " seconds" << RESET;
+
+        s = std::chrono::high_resolution_clock::now();
+        analyseBtcData(vectors);
+        f = std::chrono::high_resolution_clock::now();
+        subdurations[4] = f - s;
+        std::cout << "analyseBtcData(): " << YELLOW << subdurations[4].count() << " seconds" << RESET;
+
+        s = std::chrono::high_resolution_clock::now();
+        analyseEthData(vectors);
+        f = std::chrono::high_resolution_clock::now();
+        subdurations[5] = f - s;
+        std::cout << "analyseEthData(): " << YELLOW << subdurations[5].count() << " seconds" << RESET;
+
         auto finish = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = finish - start;
-        std::cout << "Data fetched in " << elapsed.count() << " seconds" << std::endl;
-
-        start = std::chrono::high_resolution_clock::now();
-        ExchangeDataResponses responses = retrieveResponses(futures); // <--
-        finish = std::chrono::high_resolution_clock::now();
-        elapsed = finish - start;
-        std::cout << "Data retrieved in " << elapsed.count() << " seconds" << std::endl;
-
-        start = std::chrono::high_resolution_clock::now();
-        writeResponses(responses); // <--
-        finish = std::chrono::high_resolution_clock::now();
-        elapsed = finish - start;
-        std::cout << "Data written in " << elapsed.count() << " seconds" << std::endl;
-
-        start = std::chrono::high_resolution_clock::now();
-        ExchangeDataVectors vectors = parseResponsesToVectors(responses); // <--
-        finish = std::chrono::high_resolution_clock::now();
-        elapsed = finish - start;
-        std::cout << "Data parsed in " << elapsed.count() << " seconds" << std::endl;
-
-        start = std::chrono::high_resolution_clock::now();
-        analyseBtcData(vectors); // <--
-        finish = std::chrono::high_resolution_clock::now();
-        elapsed = finish - start;
-        std::cout << "BTC data analysed in " << elapsed.count() << " seconds" << std::endl;
-
-        start = std::chrono::high_resolution_clock::now();
-        analyseEthData(vectors); // <--
-        finish = std::chrono::high_resolution_clock::now();
-        elapsed = finish - start;
-        std::cout << "ETH data analysed in " << elapsed.count() << " seconds" << std::endl;
-
-        auto f = std::chrono::high_resolution_clock::now(); // <-- end of full execution
-        durations[i] = f - s;
-        std::cout << "Run-" << i + 1 << " completed: " << durations[i].count() << " seconds" << std::endl;
+        durations[i] = finish - start;
+        std::cout << GREEN << "Run-" << i << " completed in " << durations[i].count() << " seconds" << RESET;
     }
     freeMemory();
 }
