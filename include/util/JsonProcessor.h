@@ -12,9 +12,9 @@ class JsonProcessor
 {
 public:
     static std::string formatJSON(const std::string &jsonStr);
-    static double parseNumber(json_t *value, std::string fieldName);
-    static int parseInteger(json_t *value);
-    static std::string parseString(json_t *value);
+    static double parseNumber(const json_t *value, const std::string fieldName);
+    static int parseInteger(const json_t *value);
+    static std::string parseString(const json_t *value);
     static std::string convertOptionPairsToString(const std::vector<OptionPair> &candidates);
     static std::string convertDeltaOptionsToString(const std::vector<DeltaOption> &deltaOptions);
 };

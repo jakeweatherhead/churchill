@@ -28,7 +28,7 @@ std::string JsonProcessor::formatJSON(const std::string &jsonStr)
     return formatted;
 }
 
-double JsonProcessor::parseNumber(json_t *value, std::string fieldName)
+double JsonProcessor::parseNumber(const json_t *value, const std::string fieldName)
 {
     if (!value || json_is_null(value))
     {
@@ -41,7 +41,7 @@ double JsonProcessor::parseNumber(json_t *value, std::string fieldName)
     return json_number_value(value);
 }
 
-int JsonProcessor::parseInteger(json_t *value)
+int JsonProcessor::parseInteger(const json_t *value)
 {
     if (!value || json_is_null(value))
     {
@@ -54,7 +54,7 @@ int JsonProcessor::parseInteger(json_t *value)
     return json_integer_value(value);
 }
 
-std::string JsonProcessor::parseString(json_t *value)
+std::string JsonProcessor::parseString(const json_t *value)
 {
     if (!value || json_is_null(value))
     {
