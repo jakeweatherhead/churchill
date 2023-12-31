@@ -1,0 +1,1 @@
+I wouldn't deposit money on Delta, it is that bad. Perhaps Deribit and another, equally well developed exchange, might present interesting opportunities.
