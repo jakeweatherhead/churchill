@@ -131,22 +131,42 @@ void writeResponses(ExchangeDataResponses &responses)
 ExchangeDataVectors parseResponsesToVectors(ExchangeDataResponses &responses)
 {
     ExchangeDataVectors vectors;
+    std::vector<std::thread> threads;
+
     try
     {
-        vectors.dbtBtcFuturesVec = dbtEM->parseFuturesToVector(responses.dbtBtcFuturesResponse);
-        vectors.dbtBtcOptionsVec = dbtEM->parseOptionsToVector(responses.dbtBtcOptionsResponse);
-        vectors.dbtEthFuturesVec = dbtEM->parseFuturesToVector(responses.dbtEthFuturesResponse);
-        vectors.dbtEthOptionsVec = dbtEM->parseOptionsToVector(responses.dbtEthOptionsResponse);
+        threads.emplace_back([&]()
+                             { vectors.dbtBtcFuturesVec = dbtEM->parseFuturesToVector(responses.dbtBtcFuturesResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dbtBtcOptionsVec = dbtEM->parseOptionsToVector(responses.dbtBtcOptionsResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dbtEthFuturesVec = dbtEM->parseFuturesToVector(responses.dbtEthFuturesResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dbtEthOptionsVec = dbtEM->parseOptionsToVector(responses.dbtEthOptionsResponse); });
 
-        vectors.dltBtcCallOptionsVec = dltEM->parseOptionsToVector("BTC", responses.dltCallOptionsResponse);
-        vectors.dltBtcPutOptionsVec = dltEM->parseOptionsToVector("BTC", responses.dltPutOptionsResponse);
-        vectors.dltEthCallOptionsVec = dltEM->parseOptionsToVector("ETH", responses.dltCallOptionsResponse);
-        vectors.dltEthPutOptionsVec = dltEM->parseOptionsToVector("ETH", responses.dltPutOptionsResponse);
+        threads.emplace_back([&]()
+                             { vectors.dltBtcCallOptionsVec = dltEM->parseOptionsToVector("BTC", responses.dltCallOptionsResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dltBtcPutOptionsVec = dltEM->parseOptionsToVector("BTC", responses.dltPutOptionsResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dltEthCallOptionsVec = dltEM->parseOptionsToVector("ETH", responses.dltCallOptionsResponse); });
+        threads.emplace_back([&]()
+                             { vectors.dltEthPutOptionsVec = dltEM->parseOptionsToVector("ETH", responses.dltPutOptionsResponse); });
+
+        // Wait for all threads to finish
+        for (auto &t : threads)
+        {
+            if (t.joinable())
+            {
+                t.join();
+            }
+        }
     }
     catch (const std::exception &e)
     {
         std::cerr << "Error in parseResponsesToVectors: " << e.what() << std::endl;
     }
+
     return vectors;
 }
 
