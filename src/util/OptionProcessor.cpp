@@ -72,6 +72,17 @@ std::vector<OptionPair> OptionProcessor::createOptionPairs(
         std::string callCurrency = deltaOptionType == "C" ? "USDT" : symbol;
         std::string putCurrency = deltaOptionType == "P" ? "USDT" : symbol;
 
+        if (callCurrency == symbol)
+        {
+            callPrice *= deribitComplement.underlying_price;
+            callCurrency = "USDT";
+        }
+        else
+        {
+            putPrice *= deribitComplement.underlying_price;
+            putCurrency = "USDT";
+        }
+
         OptionPair optionPair = {
             deltaSymbol,
             deribitEqvSymbol,
