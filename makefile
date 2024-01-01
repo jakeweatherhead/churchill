@@ -5,14 +5,30 @@ EXECUTABLE = ./build/churchill
 all: build
 
 build:
-	@mkdir -p build data/pcp_0/res data/pcp_0/arb data/pcp_1/res data/pcp_1/arb
-	@cd build && cmake .. && cmake --build .
+	@mkdir -p \
+	build \
+	data/pcp_0/res \
+	data/pcp_0/arb \
+	data/pcp_1/res \
+	data/pcp_1/arb
+
+	@cd \
+	build && \
+	cmake .. && \
+	cmake --build .
 
 run:
 	@$(EXECUTABLE)
 
 c:
-	@rm -rf build data cachegrind.log cachegrind.out.* callgrind.log callgrind.out.*
+	@rm -rf \
+	build \
+	data \
+	cachegrind.log \
+	cachegrind.out.* \
+	callgrind.log \
+	callgrind.out.* \
+	valgrind.log
 
 v:
 	valgrind --leak-check=full --track-origins=yes $(EXECUTABLE) > valgrind.log 2>&1
