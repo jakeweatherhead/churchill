@@ -4,7 +4,7 @@
 #include "util/RestClient.h"
 #include "util/JsonProcessor.h"
 
-#include "DeltaExchange/DeltaOption.h"
+#include "exchange/DeltaOption.h"
 
 #include <string>
 #include <fstream>

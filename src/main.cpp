@@ -3,12 +3,11 @@
 #include "util/OptionProcessor.h"
 #include "util/Toolkit.h"
 
-#include "DeribitExchange/DeribitExchangeManager.h"
+#include "exchange/DeribitExchangeManager.h"
+#include "exchange/DeltaExchangeManager.h"
+#include "exchange/DeltaOption.h"
 
-#include "DeltaExchange/DeltaExchangeManager.h"
-#include "DeltaExchange/DeltaOption.h"
-
-#include "PutCallParity/PCP_Strategy_0.h"
+#include "strategy/PCP_Strategy_0.h"
 
 #include <iostream>
 #include <chrono>

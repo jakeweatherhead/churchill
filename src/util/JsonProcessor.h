@@ -1,12 +1,13 @@
 #ifndef JSON_PROCESSOR_H
 #define JSON_PROCESSOR_H
 
+#include "exchange/DeltaOption.h"
+
 #include "OptionPair.h"
 
 #include <string>
 #include <jansson.h>
 #include <nlohmann/json.hpp>
-#include "DeltaOption.h"
 
 class JsonProcessor
 {

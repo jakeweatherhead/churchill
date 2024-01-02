@@ -4,8 +4,8 @@
 #include "util/RestClient.h"
 #include "util/JsonProcessor.h"
 
-#include "DeribitExchange/DeribitFutures.h"
-#include "DeribitExchange/DeribitOption.h"
+#include "exchange/DeribitFutures.h"
+#include "exchange/DeribitOption.h"
 
 #include <string>
 #include <fstream>

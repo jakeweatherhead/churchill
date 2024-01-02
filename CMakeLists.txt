@@ -12,18 +12,19 @@ pkg_check_modules(JSON REQUIRED jansson)
 include_directories(${CURL_INCLUDE_DIR})
 include_directories(${JSON_INCLUDE_DIRS})
 include_directories(
-    include
-    include/DeltaExchange
-    include/DeribitExchange
-    include/PutCallParity
-    include/util)
+    src
+    src/*.h
+    src/exchange/*.h
+    src/strategy/*.h
+    src/util/*.h)
 
 file(GLOB SOURCES 
-    src/*.cpp
-    src/DeltaExchange/*.cpp
-    src/DeribitExchange/*.cpp
-    src/PutCallParity/*.cpp
-    src/util/*.cpp)
+src
+src/*.cpp
+src/exchange/*.cpp
+src/strategy/*.cpp
+src/util/*.cpp
+)
 
 add_executable(churchill ${SOURCES})
 

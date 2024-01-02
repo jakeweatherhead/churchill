@@ -1,7 +1,9 @@
 #include "util/OptionProcessor.h"
-#include "DeltaExchange/DeltaExchangeManager.h"
-#include "DeribitExchange/DeribitExchangeManager.h"
 #include "util/Toolkit.h"
+
+#include "exchange/DeltaExchangeManager.h"
+#include "exchange/DeribitExchangeManager.h"
+
 #include <iostream>
 
 OptionProcessor::OptionProcessor() {}

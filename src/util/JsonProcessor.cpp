@@ -1,4 +1,5 @@
 #include "util/JsonProcessor.h"
+
 #include <iostream>
 
 std::string JsonProcessor::formatJSON(const std::string &jsonStr)
@@ -91,9 +92,11 @@ std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPa
     return j.dump();
 }
 
-std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOption> &options) {
+std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOption> &options)
+{
     nlohmann::json j;
-    for (const auto &option : options) {
+    for (const auto &option : options)
+    {
         nlohmann::json jOption;
         jOption["close"] = option.close;
         jOption["contract_type"] = option.contract_type;
@@ -102,8 +105,7 @@ std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOp
             {"gamma", option.greeks.gamma},
             {"rho", option.greeks.rho},
             {"theta", option.greeks.theta},
-            {"vega", option.greeks.vega}
-        };
+            {"vega", option.greeks.vega}};
         jOption["high"] = option.high;
         jOption["low"] = option.low;
         jOption["mark_price"] = option.mark_price;
@@ -117,8 +119,7 @@ std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOp
         jOption["open"] = option.open;
         jOption["price_band"] = {
             {"lower_limit", option.price_band.lower_limit},
-            {"upper_limit", option.price_band.upper_limit}
-        };
+            {"upper_limit", option.price_band.upper_limit}};
         jOption["product_id"] = option.product_id;
         jOption["quotes"] = {
             {"ask_iv", option.quotes.ask_iv},
@@ -128,8 +129,7 @@ std::string JsonProcessor::convertDeltaOptionsToString(const std::vector<DeltaOp
             {"bid_iv", option.quotes.bid_iv},
             {"bid_size", option.quotes.bid_size},
             {"impact_mid_price", option.quotes.impact_mid_price},
-            {"mark_iv", option.quotes.mark_iv}
-        };
+            {"mark_iv", option.quotes.mark_iv}};
         jOption["size"] = option.size;
         jOption["spot_price"] = option.spot_price;
         jOption["strike_price"] = option.strike_price;
