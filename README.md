@@ -2,4 +2,4 @@
 
 Built with Gerard J. Hotlzmann's Power of 10 rules.  
 
-Safety is a priority for the times where I cannot be on standby: flights, sleep, on holiday etc.
+Safety is a priority for the times when I cannot be on standby: flights, sleep, on holiday etc.
