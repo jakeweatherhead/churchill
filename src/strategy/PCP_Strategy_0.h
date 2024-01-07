@@ -15,7 +15,7 @@ public:
     void setProfit(OptionPair &optionPair);
     void setReturnPerc(OptionPair &optionPair);
     bool returnIsSufficient(OptionPair &optionPair);
-
+    bool liquidityIsSufficient(OptionPair &optionPair);
 };
 
 #endif // PCP_STRATEGY_0_H

@@ -29,43 +29,52 @@ std::string JsonProcessor::formatJSON(const std::string &jsonStr)
     return formatted;
 }
 
-double JsonProcessor::parseNumber(const json_t *value, const std::string fieldName)
+double JsonProcessor::parseNumber(const json_t *jsonObj, const char *key)
 {
-    if (!value || json_is_null(value))
+    json_t *jsonValue = json_object_get(jsonObj, key);
+    double numValue;
+    if (!jsonValue || json_is_null(jsonValue))
     {
         return 0.0;
     }
-    else if (!json_is_number(value))
+    else if (!json_is_number(jsonValue))
     {
-        throw std::runtime_error("json_t value " + fieldName + " is not a number\n");
+        std::string keyStr = key;
+        throw std::runtime_error("json_t value " + keyStr + " string is not a number");
     }
-    return json_number_value(value);
+    return json_number_value(jsonValue);
 }
 
-int JsonProcessor::parseInteger(const json_t *value)
+int JsonProcessor::parseInteger(const json_t *jsonObj, const char *key)
 {
-    if (!value || json_is_null(value))
+    json_t *jsonValue = json_object_get(jsonObj, key);
+    int intValue;
+    if (!jsonValue || json_is_null(jsonValue))
     {
         return 0;
     }
-    else if (!json_is_integer(value))
+    else if (!json_is_integer(jsonValue))
     {
-        throw std::runtime_error("json_t value to be parsed to integer is not an integer");
+        std::string keyStr = key;
+        throw std::runtime_error("json_t value " + keyStr + " string is not an integer");
     }
-    return json_integer_value(value);
+    return json_integer_value(jsonValue);
 }
 
-std::string JsonProcessor::parseString(const json_t *value)
+std::string JsonProcessor::parseString(const json_t *jsonObj, const char *key)
 {
-    if (!value || json_is_null(value))
+    json_t *jsonValue = json_object_get(jsonObj, key);
+    std::string strValue;
+    if (!jsonValue || json_is_null(jsonValue))
     {
         return "null";
     }
-    else if (!json_is_string(value))
+    else if (!json_is_string(jsonValue))
     {
-        throw std::runtime_error("json_t value to be parsed to string is not a string");
+        std::string keyStr = key;
+        throw std::runtime_error("json_t value " + keyStr + " string is not a string");
     }
-    return json_string_value(value);
+    return json_string_value(jsonValue);
 }
 
 std::string JsonProcessor::convertOptionPairsToString(const std::vector<OptionPair> &candidates)

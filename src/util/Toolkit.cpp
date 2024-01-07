@@ -2,6 +2,7 @@
 #include "util/JsonProcessor.h"
 
 #include <stdexcept>
+#include <iostream>
 
 std::string Toolkit::convertDeltaExpirationToDeribit(const std::string &dltExpiry)
 {
@@ -36,12 +37,35 @@ std::string Toolkit::convertDeltaExpirationToDeribit(const std::string &dltExpir
     return deribitExpiration;
 }
 
-void Toolkit::writeToFile(const std::string &filename, const std::string &data)
+void Toolkit::writeJsonToFile(const std::string &filename, const std::string &data)
 {
+    // Open file
     std::ofstream file;
     file.open(filename);
-    std::string formattedData = JsonProcessor::formatJSON(data);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Error: Unable to open file \"" + filename + "\" for writing.");
+    }
+
+    // Format data
+    std::string formattedData;
+    try
+    {
+        formattedData = JsonProcessor::formatJSON(data);
+    }
+    catch (const std::exception &e)
+    {
+        throw std::runtime_error("Error: Failed to format JSON data. " + std::string(e.what()));
+    }
+
+    // Write file
     file << formattedData;
+    if (file.fail())
+    {
+        throw std::runtime_error("Error: Failed to write to the file \"" + filename + "\".");
+    }
+
+    // Close file
     file.close();
 }
 
