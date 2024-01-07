@@ -1,1 +1,5 @@
-I wouldn't deposit money on Delta, it is that bad. Perhaps Deribit and another, equally well developed exchange, might present interesting opportunities.
+## How to run
+
+Built with Gerard J. Hotlzmann's Power of 10 rules.  
+
+Safety is a priority for the times where I cannot be on standby: flights, sleep, on holiday etc.
