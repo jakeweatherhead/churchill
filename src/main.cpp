@@ -80,7 +80,6 @@ ExchangeDataFutures fetchData()
     futures.dbtBtcOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchBtcOptions, dbtEM);
     futures.dbtEthFuturesFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthFutures, dbtEM);
     futures.dbtEthOptionsFuture = std::async(std::launch::async, &DeribitExchangeManager::fetchEthOptions, dbtEM);
-
     futures.dltCallsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "call_options");
     futures.dltPutsFuture = std::async(std::launch::async, &DeltaExchangeManager::fetchOptions, dltEM, "put_options");
     return futures;
@@ -109,13 +108,13 @@ void writeResponses(ExchangeDataResponses &responses)
 {
     std::vector<std::thread> threads;
 
-    // Spawn threads for each file write operation
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dlt_call_options_res.json", responses.dltCallOptionsResponse);
-    threads.emplace_back(Toolkit::writeToFile, "data/pcp_0/res/dlt_put_options_res.json", responses.dltPutOptionsResponse);
+    // Spawn threads
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dbt_btc_futures_res.json", responses.dbtBtcFuturesResponse);
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dbt_btc_options_res.json", responses.dbtBtcOptionsResponse);
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dbt_eth_futures_res.json", responses.dbtEthFuturesResponse);
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dbt_eth_options_res.json", responses.dbtEthOptionsResponse);
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dlt_call_options_res.json", responses.dltCallOptionsResponse);
+    threads.emplace_back(Toolkit::writeJsonToFile, "data/pcp_0/res/dlt_put_options_res.json", responses.dltPutOptionsResponse);
 
     // Wait for all threads to finish
     for (auto &t : threads)
@@ -163,7 +162,7 @@ ExchangeDataVectors parseResponsesToVectors(ExchangeDataResponses &responses)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error in parseResponsesToVectors: " << e.what() << std::endl;
+        std::cerr << e.what();
     }
 
     return vectors;
@@ -185,7 +184,7 @@ void analyseBtcData(ExchangeDataVectors &vectors)
         Toolkit::sortOptionPairsByReturnPerc(btcCandidates);
         std::string candidates = JsonProcessor::convertOptionPairsToString(btcCandidates);
         std::string filename = "data/pcp_0/arb/BTC_ops.json";
-        Toolkit::writeToFile(filename, candidates);
+        Toolkit::writeJsonToFile(filename, candidates);
     }
 }
 
@@ -205,7 +204,7 @@ void analyseEthData(ExchangeDataVectors &vectors)
         Toolkit::sortOptionPairsByReturnPerc(ethCandidates);
         std::string candidates = JsonProcessor::convertOptionPairsToString(ethCandidates);
         std::string filename = "data/pcp_0/arb/ETH_ops.json";
-        Toolkit::writeToFile(filename, candidates);
+        Toolkit::writeJsonToFile(filename, candidates);
     }
 }
 
@@ -228,49 +227,49 @@ int main()
 {
     for (int i = 0; i < NUM_RUNS; i++)
     {
-        auto start = std::chrono::high_resolution_clock::now();
+        // auto start = std::chrono::high_resolution_clock::now(); // profiling
 
-        std::chrono::duration<double> subdurations[6] = {};
+        // std::chrono::duration<double> subdurations[6] = {}; // profiling
 
-        auto s = std::chrono::high_resolution_clock::now();
+        // auto s = std::chrono::high_resolution_clock::now(); // profiling
         ExchangeDataFutures futures = fetchData();
-        auto f = std::chrono::high_resolution_clock::now();
-        subdurations[0] = f - s;
-        std::cout << "fetchData(): " << YELLOW << subdurations[0].count() << " seconds" << RESET;
+        // auto f = std::chrono::high_resolution_clock::now(); // profiling
+        // subdurations[0] = f - s; // profiling
+        // std::cout << "fetchData(): " << YELLOW << subdurations[0].count() << " seconds" << RESET; // profiling
 
-        s = std::chrono::high_resolution_clock::now();
+        // s = std::chrono::high_resolution_clock::now();  // profiling
         ExchangeDataResponses responses = retrieveResponses(futures);
-        f = std::chrono::high_resolution_clock::now();
-        subdurations[1] = f - s;
-        std::cout << "retrieveResponses(): " << YELLOW << subdurations[1].count() << " seconds" << RESET;
+        // f = std::chrono::high_resolution_clock::now();  // profiling
+        // subdurations[1] = f - s;  // profiling
+        // std::cout << "retrieveResponses(): " << YELLOW << subdurations[1].count() << " seconds" << RESET;  // profiling
 
-        s = std::chrono::high_resolution_clock::now();
+        // s = std::chrono::high_resolution_clock::now(); // profiling
         writeResponses(responses);
-        f = std::chrono::high_resolution_clock::now();
-        subdurations[2] = f - s;
-        std::cout << "writeResponses(): " << YELLOW << subdurations[2].count() << " seconds" << RESET;
+        // f = std::chrono::high_resolution_clock::now(); // profiling
+        // subdurations[2] = f - s; // profiling
+        // std::cout << "writeResponses(): " << YELLOW << subdurations[2].count() << " seconds" << RESET; // profiling
 
-        s = std::chrono::high_resolution_clock::now();
+        // s = std::chrono::high_resolution_clock::now(); // profiling
         ExchangeDataVectors vectors = parseResponsesToVectors(responses);
-        f = std::chrono::high_resolution_clock::now();
-        subdurations[3] = f - s;
-        std::cout << "parseResponsesToVectors(): " << YELLOW << subdurations[3].count() << " seconds" << RESET;
+        // f = std::chrono::high_resolution_clock::now(); // profiling
+        // subdurations[3] = f - s; // profiling
+        // std::cout << "parseResponsesToVectors(): " << YELLOW << subdurations[3].count() << " seconds" << RESET; // profiling
 
-        s = std::chrono::high_resolution_clock::now();
+        // s = std::chrono::high_resolution_clock::now(); // profiling
         analyseBtcData(vectors);
-        f = std::chrono::high_resolution_clock::now();
-        subdurations[4] = f - s;
-        std::cout << "analyseBtcData(): " << YELLOW << subdurations[4].count() << " seconds" << RESET;
+        // f = std::chrono::high_resolution_clock::now(); // profiling
+        // subdurations[4] = f - s; // profiling
+        // std::cout << "analyseBtcData(): " << YELLOW << subdurations[4].count() << " seconds" << RESET; // profiling
 
-        s = std::chrono::high_resolution_clock::now();
+        // s = std::chrono::high_resolution_clock::now(); // profiling
         analyseEthData(vectors);
-        f = std::chrono::high_resolution_clock::now();
-        subdurations[5] = f - s;
-        std::cout << "analyseEthData(): " << YELLOW << subdurations[5].count() << " seconds" << RESET;
+        // f = std::chrono::high_resolution_clock::now(); // profiling
+        // subdurations[5] = f - s; // profiling
+        // std::cout << "analyseEthData(): " << YELLOW << subdurations[5].count() << " seconds" << RESET; // profiling
 
-        auto finish = std::chrono::high_resolution_clock::now();
-        durations[i] = finish - start;
-        std::cout << GREEN << "Run-" << i << " completed in " << durations[i].count() << " seconds" << RESET;
+        // auto finish = std::chrono::high_resolution_clock::now(); // profiling
+        // durations[i] = finish - start; // profiling
+        // std::cout << GREEN << "Run-" << i << " completed in " << durations[i].count() << " seconds" << RESET; // profiling
     }
     freeMemory();
 }
