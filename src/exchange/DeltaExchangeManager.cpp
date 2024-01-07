@@ -1,4 +1,5 @@
 #include "exchange/DeltaExchangeManager.h"
+#include "util/Toolkit.h"
 
 #include <iostream>
 
@@ -42,153 +43,78 @@ std::vector<DeltaOption> DeltaExchangeManager::parseOptionsToVector(const std::s
     }
 
     size_t index;
-    json_t *value, *greeks, *priceBand, *quotes, *field;
-
+    json_t *jsonObj;
     std::vector<DeltaOption> optionsVec;
 
-    json_array_foreach(result, index, value)
+    json_array_foreach(result, index, jsonObj)
     {
-        json_t *oi_value_symbolJson = json_object_get(value, "oi_value_symbol");
-        std::string optionCurrency = JsonProcessor::parseString(oi_value_symbolJson);
+        std::string optionCurrency;
+        try
+        {
+            optionCurrency = JsonProcessor::parseString(jsonObj, "oi_value_symbol");
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what();
+        }
 
         if (optionCurrency == currency)
         {
             DeltaOption option;
+            try
+            {
+                option.close = JsonProcessor::parseNumber(jsonObj, "close");
+                option.contract_type = JsonProcessor::parseString(jsonObj, "contract_type");
 
-            field = json_object_get(value, "close");
-            option.close = JsonProcessor::parseNumber(field, "close");
+                json_t *greeks = json_object_get(jsonObj, "greeks");
+                option.greeks.delta = JsonProcessor::parseString(greeks, "delta");
+                option.greeks.gamma = JsonProcessor::parseString(greeks, "gamma");
+                option.greeks.rho = JsonProcessor::parseString(greeks, "rho");
+                option.greeks.theta = JsonProcessor::parseString(greeks, "theta");
+                option.greeks.vega = JsonProcessor::parseString(greeks, "vega");
 
-            field = json_object_get(value, "contract_type");
-            option.contract_type = JsonProcessor::parseString(field);
+                option.high = JsonProcessor::parseNumber(jsonObj, "high");
+                option.low = JsonProcessor::parseNumber(jsonObj, "low");
+                option.mark_price = JsonProcessor::parseString(jsonObj, "mark_price");
+                option.mark_vol = JsonProcessor::parseString(jsonObj, "mark_vol");
+                option.oi = JsonProcessor::parseString(jsonObj, "oi");
+                option.oi_change_usd_6h = JsonProcessor::parseString(jsonObj, "oi_change_usd_6h");
+                option.oi_contracts = JsonProcessor::parseString(jsonObj, "oi_contracts");
+                option.oi_value = JsonProcessor::parseString(jsonObj, "oi_value");
+                option.oi_value_symbol = JsonProcessor::parseString(jsonObj, "oi_value_symbol");
+                option.oi_value_usd = JsonProcessor::parseString(jsonObj, "oi_value_usd");
+                option.open = JsonProcessor::parseNumber(jsonObj, "open");
 
-            //==-------------------------------------------------------==//
-            // Greeks
+                json_t *priceBand = json_object_get(jsonObj, "price_band");
+                option.price_band.lower_limit = JsonProcessor::parseString(priceBand, "lower_limit");
+                option.price_band.upper_limit = JsonProcessor::parseString(priceBand, "upper_limit");
 
-            greeks = json_object_get(value, "greeks");
+                option.product_id = JsonProcessor::parseInteger(jsonObj, "product_id");
 
-            field = json_object_get(greeks, "delta");
-            option.greeks.delta = JsonProcessor::parseString(field);
+                json_t *quotes = json_object_get(jsonObj, "quotes");
+                option.quotes.ask_iv = JsonProcessor::parseString(quotes, "ask_iv");
+                option.quotes.ask_size = JsonProcessor::parseString(quotes, "ask_size");
+                option.quotes.best_ask = JsonProcessor::parseString(quotes, "best_ask");
+                option.quotes.best_bid = JsonProcessor::parseString(quotes, "best_bid");
+                option.quotes.bid_iv = JsonProcessor::parseString(quotes, "bid_iv");
+                option.quotes.bid_size = JsonProcessor::parseString(quotes, "bid_size");
+                option.quotes.impact_mid_price = JsonProcessor::parseString(quotes, "impact_mid_price");
+                option.quotes.mark_iv = JsonProcessor::parseString(quotes, "mark_iv");
 
-            field = json_object_get(greeks, "gamma");
-            option.greeks.gamma = JsonProcessor::parseString(field);
-
-            field = json_object_get(greeks, "rho");
-            option.greeks.rho = JsonProcessor::parseString(field);
-
-            field = json_object_get(greeks, "theta");
-            option.greeks.theta = JsonProcessor::parseString(field);
-
-            field = json_object_get(greeks, "vega");
-            option.greeks.vega = JsonProcessor::parseString(field);
-
-            //==-------------------------------------------------------==//
-
-            field = json_object_get(value, "high");
-            option.high = JsonProcessor::parseNumber(field, "high");
-
-            field = json_object_get(value, "low");
-            option.low = JsonProcessor::parseNumber(field, "low");
-
-            field = json_object_get(value, "mark_price");
-            option.mark_price = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "mark_vol");
-            option.mark_vol = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi");
-            option.oi = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi_change_usd_6h");
-            option.oi_change_usd_6h = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi_contracts");
-            option.oi_contracts = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi_value");
-            option.oi_value = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi_value_symbol");
-            option.oi_value_symbol = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "oi_value_usd");
-            option.oi_value_usd = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "open");
-            option.open = JsonProcessor::parseNumber(field, "open");
-
-            //==-------------------------------------------------------==//
-            // Price band
-
-            priceBand = json_object_get(value, "price_band");
-
-            field = json_object_get(priceBand, "lower_limit");
-            option.price_band.lower_limit = JsonProcessor::parseString(field);
-
-            field = json_object_get(priceBand, "upper_limit");
-            option.price_band.upper_limit = JsonProcessor::parseString(field);
-
-            //==-------------------------------------------------------==//
-
-            field = json_object_get(value, "product_id");
-            option.product_id = JsonProcessor::parseInteger(field);
-
-            //==-------------------------------------------------------==//
-            // Quotes
-
-            quotes = json_object_get(value, "quotes");
-
-            field = json_object_get(quotes, "ask_iv");
-            option.quotes.ask_iv = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "ask_size");
-            option.quotes.ask_size = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "best_ask");
-            option.quotes.best_ask = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "best_bid");
-            option.quotes.best_bid = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "bid_iv");
-            option.quotes.bid_iv = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "bid_size");
-            option.quotes.bid_size = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "impact_mid_price");
-            option.quotes.impact_mid_price = JsonProcessor::parseString(field);
-
-            field = json_object_get(quotes, "mark_iv");
-            option.quotes.mark_iv = JsonProcessor::parseString(field);
-
-            //==-------------------------------------------------------==//
-            
-            field = json_object_get(value, "size");
-            option.size = JsonProcessor::parseNumber(field, "size");
-
-            field = json_object_get(value, "spot_price");
-            option.spot_price = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "strike_price");
-            option.strike_price = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "symbol");
-            option.symbol = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "timestamp");
-            option.timestamp = JsonProcessor::parseInteger(field);
-
-            field = json_object_get(value, "turnover");
-            option.turnover = JsonProcessor::parseNumber(field, "turnover");
-
-            field = json_object_get(value, "turnover_symbol");
-            option.turnover_symbol = JsonProcessor::parseString(field);
-
-            field = json_object_get(value, "turnover_usd");
-            option.turnover_usd = JsonProcessor::parseNumber(field, "turnover_usd");
-
-            field = json_object_get(value, "volume");
-            option.volume = JsonProcessor::parseNumber(field, "volume");
+                option.size = JsonProcessor::parseNumber(jsonObj, "size");
+                option.spot_price = JsonProcessor::parseString(jsonObj, "spot_price");
+                option.strike_price = JsonProcessor::parseString(jsonObj, "strike_price");
+                option.symbol = JsonProcessor::parseString(jsonObj, "symbol");
+                option.timestamp = JsonProcessor::parseInteger(jsonObj, "timestamp");
+                option.turnover = JsonProcessor::parseNumber(jsonObj, "turnover");
+                option.turnover_symbol = JsonProcessor::parseString(jsonObj, "turnover_symbol");
+                option.turnover_usd = JsonProcessor::parseNumber(jsonObj, "turnover_usd");
+                option.volume = JsonProcessor::parseNumber(jsonObj, "volume");
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << e.what();
+            }
 
             optionsVec.push_back(option);
         }
