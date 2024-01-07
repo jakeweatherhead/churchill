@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 
+# Install required packages
 RUN apt-get update \
   && apt-get install -yq --no-install-recommends \
   pkg-config \
@@ -11,18 +12,26 @@ RUN apt-get update \
   g++ \
   cmake \
   ca-certificates \
-  valgrind
+  valgrind \
+  dialog 
 
+# Set the working directory to /churchill
 WORKDIR /churchill
 
+# Copy the entire project into the container
 COPY . /churchill
 
-RUN mkdir /churchill/build
-
-WORKDIR /churchill/build
-
-RUN cmake ..
-
+# Build the main application
+RUN mkdir src/build
+WORKDIR /churchill/src/build
+RUN cmake ../..
 RUN cmake --build .
 
-CMD ["./churchill"]
+# Build the tests
+WORKDIR /churchill/test
+# Add commands to build your tests here
+
+# Add and set up the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
