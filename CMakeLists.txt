@@ -4,6 +4,8 @@ project(churchill)
 
 set(CMAKE_CXX_STANDARD 11)
 
+add_compile_options(-Wall -Wextra -Wpedantic)
+
 find_package(CURL REQUIRED)
 
 find_package(PkgConfig REQUIRED)
@@ -16,14 +18,15 @@ include_directories(
     src/*.h
     src/exchange/*.h
     src/strategy/*.h
-    src/util/*.h)
+    src/util/*.h
+)
 
 file(GLOB SOURCES 
-src
-src/*.cpp
-src/exchange/*.cpp
-src/strategy/*.cpp
-src/util/*.cpp
+    src
+    src/*.cpp
+    src/exchange/*.cpp
+    src/strategy/*.cpp
+    src/util/*.cpp
 )
 
 add_executable(churchill ${SOURCES})
