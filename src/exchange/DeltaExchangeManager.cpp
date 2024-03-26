@@ -11,7 +11,7 @@ std::string DeltaExchangeManager::fetchOptions(std::string optionType)
 {
     std::string url = "https://api.delta.exchange/v2/tickers?contract_types=" + optionType;
 
-    std::string res;
+    std::string response;
     try
     {
         response = RestClient::HTTP_GET(url);
