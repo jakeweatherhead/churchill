@@ -14,15 +14,15 @@ std::string DeltaExchangeManager::fetchOptions(std::string optionType)
     std::string res;
     try
     {
-        res = RestClient::HTTP_GET(url);
+        response = RestClient::HTTP_GET(url);
     }
-    catch (const std::runtime_error &e)
+    catch (const std::runtime_error &error)
     {
-        std::cerr << e.what();
+        std::cerr << error.what();
     }
 
-    std::string formattedRes = JsonProcessor::formatJSON(res);
-    return formattedRes;
+    std::string formattedResponse = JsonProcessor::formatJSON(response);
+    return formattedResponse;
 }
 
 std::vector<DeltaOption> DeltaExchangeManager::parseOptionsToVector(const std::string &currency, const std::string &jsonStr)
